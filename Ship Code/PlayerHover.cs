@@ -8,11 +8,13 @@ public class PlayerHover : Hover
 
     public GameObject hitScreen;
     public Text lapCounter;
+    public Text gearText;
     private void Start(){
         findTimer();
         findNodes();
         findTrack();
         lapCounter.text = "Lap \n 1/3";
+        gearText.text = "1";
     }
 
     void Update () 
@@ -23,25 +25,13 @@ public class PlayerHover : Hover
             powerInput = Input.GetAxisRaw ("Vertical");
             turnInput = Input.GetAxis ("Horizontal");
             if(controlsActive){
-                if(accel < 1 && powerInput>0){
-                    accel += accelerationRate;
-                }else{
-                    if(accel > 0){
-                        accel -= accelerationRate;
-                    }
-                }
-                if(reverseAccel < 1 && powerInput<0){
-                    reverseAccel += accelerationRate;
-                }else{
-                    if(reverseAccel > 0){
-                        reverseAccel -= accelerationRate;
-                    }
-                }
+                gearBox();
             }
         }else{
             hitScreen.gameObject.SetActive(true);
             collissionTimer++;
             accel = 0;
+            currentGear = 1;
             if(collissionTimer >= 150){
                 engineOn = true;
                 collissionTimer = 0;
@@ -88,5 +78,48 @@ public class PlayerHover : Hover
                 lapCounter.text = "Lap\n" + (currentLaP+1)+"/3";
             }
         }
+    }
+
+    private void gearBox(){
+        //check if driver is accelerating
+        if(powerInput>0){
+            if(accel < 1){
+                accel += accelerationRate;
+            }else{
+                shiftgear("up");
+            }            
+        }else{
+            if(accel > 0){
+                accel -= accelerationRate;
+            }else{
+                shiftgear("down");
+            }
+        }
+        //check if reversing
+        if(reverseAccel < 1 && powerInput<0){
+            reverseAccel += accelerationRate;
+        }else{
+            if(reverseAccel > 0){
+                reverseAccel -= accelerationRate;
+            }
+        }
+    }
+
+    private void shiftgear(string direction){
+        switch(direction){
+            case "up":
+                if (currentGear<maxGear){
+                    currentGear++;
+                    accel = 0f;                    
+                }
+                break;
+            case "down":
+                if (currentGear>1){
+                    currentGear--;
+                    accel = 0.99f;
+                }
+                break;
+        }
+        gearText.text = currentGear.ToString();
     }
 }

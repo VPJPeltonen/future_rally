@@ -12,7 +12,7 @@ public class Hover : MonoBehaviour
     protected int currentNode = 0;
     [Header("Enginestuff")]
     //forward speed
-    public float speed = 80f;
+    public float speed = 40f;
     //turning speed
     public float turnSpeed = 0.25f;
     //tilt speed of the ship
@@ -38,11 +38,10 @@ public class Hover : MonoBehaviour
     protected int currentLaP = 0;
     protected int currentCP = 0;
     protected int currentSector = 0;
-
-    [Header("UI stuff")]
-    public RaceOrderKeeper keeper;
-    public int carNumber;
-    public string racerName = "Steve Noname";
+    protected int currentGear = 1;
+    protected int maxGear = 5;
+    protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 2.95f };
+    protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.4f, 0.2f };
 
     [Header("Audio stuff")]
     public AudioSource engineSound;
@@ -50,6 +49,13 @@ public class Hover : MonoBehaviour
     private const float LowPitch = .1f;
     private const float HighPitch = 1.5f;
     private const float SpeedToRevs = 1.5f;
+
+    [Header("UI stuff")]
+    public RaceOrderKeeper keeper;
+    public int carNumber;
+    public string racerName = "Steve Noname";
+
+
     private void Start(){
         findTimer();
         findNodes();
@@ -85,7 +91,8 @@ public class Hover : MonoBehaviour
     protected void EngineControl(){
         //forward power
         if (powerInput>0){
-            shipRigidbody.AddRelativeForce(0f, 0f, powerInput * speed * accel);
+            var thrust = (powerInput * speed * accel * revMod[currentGear-1])+(powerInput * speed * gearValues[currentGear-1]);
+            shipRigidbody.AddRelativeForce(0f, 0f, thrust);
         }
         
         if (powerInput<0){
@@ -108,7 +115,7 @@ public class Hover : MonoBehaviour
         if(currentCP==3){
             target = checkPointList[0];
         }else{
-            target = checkPointList[(currentCP+2)*3];
+            target = checkPointList[(currentCP+2)*3];//the weird number is because the list of checkpoints has some unnecessary items
         }
         float distance = Vector3.Distance(target.position, transform.position); 
         float lapPenalty = (3-currentLaP)*20000;
