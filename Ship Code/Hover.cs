@@ -47,7 +47,7 @@ public class Hover : MonoBehaviour
     public AudioSource engineSound;
     private float jetPitch;
     private const float LowPitch = 0.2f;
-    private const float HighPitch = 1f;
+    private const float HighPitch = 2f;
     private const float SpeedToRevs = 1.5f;
 
     [Header("UI stuff")]
