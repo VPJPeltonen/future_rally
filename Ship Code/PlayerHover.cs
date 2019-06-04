@@ -90,7 +90,7 @@ public class PlayerHover : Hover
             }            
         }else{
             if(accel > 0){
-                accel -= accelerationRate;
+                accel -= accelerationRate*2;
             }else{
                 shiftgear("down");
             }
