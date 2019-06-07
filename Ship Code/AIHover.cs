@@ -18,7 +18,7 @@ public class AIHover : Hover
     private bool avoiding;
     private bool accelerating;
 
-    void OnDrawGizmos(){
+    void OnDrawGizmos(){//draws sensors to help see how far they reach
         shipRigidbody = GetComponent <Rigidbody>();
         CheckSensors();
     }
@@ -72,13 +72,18 @@ public class AIHover : Hover
     private void Fly(){
         //forward power
         if(accelerating){
-            shipRigidbody.AddRelativeForce(0f, 0f, powerInput * speed * accel);
+            var thrust = getThrust();
+            shipRigidbody.AddRelativeForce(0f, 0f, thrust);
             if(accel < 1){
                 accel += accelerationRate;
-            }
+            }else{
+                shiftgear("up");
+            }   
         }else{
             if(accel > 0){
                 accel -= accelerationRate;
+            }else{
+                shiftgear("down");
             }
         }
     }

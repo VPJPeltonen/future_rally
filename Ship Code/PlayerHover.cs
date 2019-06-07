@@ -105,21 +105,7 @@ public class PlayerHover : Hover
         }
     }
 
-    private void shiftgear(string direction){
-        switch(direction){
-            case "up":
-                if (currentGear<maxGear){
-                    currentGear++;
-                    accel = 0f;                    
-                }
-                break;
-            case "down":
-                if (currentGear>1){
-                    currentGear--;
-                    accel = 0.99f;
-                }
-                break;
-        }
+    private void showGear(){
         gearText.text = currentGear.ToString();
     }
 }

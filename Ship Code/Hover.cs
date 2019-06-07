@@ -91,7 +91,7 @@ public class Hover : MonoBehaviour
     protected void EngineControl(){
         //forward power
         if (powerInput>0){
-            var thrust = (powerInput * speed * accel * revMod[currentGear-1])+(powerInput * speed * gearValues[currentGear-1]);
+            var thrust = getThrust();
             shipRigidbody.AddRelativeForce(0f, 0f, thrust);
         }
         
@@ -151,5 +151,29 @@ public class Hover : MonoBehaviour
         var gearmod = gearValues[currentGear-1]/2;
         float engineRevs = Mathf.Abs (accel+gearmod) * SpeedToRevs;
         engineSound.pitch = Mathf.Clamp (engineRevs, LowPitch+gearmod, HighPitch+gearmod);       
+    }
+
+    protected void shiftgear(string direction){
+        switch(direction){
+            case "up":
+                if (currentGear<maxGear){
+                    currentGear++;
+                    accel = 0f;                    
+                }
+                break;
+            case "down":
+                if (currentGear>1){
+                    currentGear--;
+                    accel = 0.99f;
+                }
+                break;
+        }
+        showGear();
+    }    
+
+    protected void showGear(){}
+    protected float getThrust(){
+        float tempThrust = (powerInput * speed * accel * revMod[currentGear-1])+(powerInput * speed * gearValues[currentGear-1]);
+        return tempThrust;
     }
 }
