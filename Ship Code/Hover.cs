@@ -12,7 +12,7 @@ public class Hover : MonoBehaviour
     protected int currentNode = 0;
     [Header("Enginestuff")]
     //forward speed
-    public float speed = 40f;
+    public float speed = 32f;
     //turning speed
     public float turnSpeed = 0.25f;
     //tilt speed of the ship
@@ -54,8 +54,8 @@ public class Hover : MonoBehaviour
     public RaceOrderKeeper keeper;
     public int carNumber;
     public string racerName = "Steve Noname";
-
-
+    protected float moveSpeed;
+    protected Vector3 lastPosition;
     private void Start(){
         findTimer();
         findNodes();
@@ -64,6 +64,7 @@ public class Hover : MonoBehaviour
     
     protected void Awake () 
     {
+        lastPosition = transform.position; 
         shipRigidbody = GetComponent <Rigidbody>();
         //get original rotations for stabilisation
         zRotation =  transform.eulerAngles.z;
@@ -176,4 +177,6 @@ public class Hover : MonoBehaviour
         float tempThrust = (powerInput * speed * accel * revMod[currentGear-1])+(powerInput * speed * gearValues[currentGear-1]);
         return tempThrust;
     }
+
+
 }

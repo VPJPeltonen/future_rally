@@ -7,8 +7,7 @@ public class PlayerHover : Hover
 {
 
     public GameObject hitScreen;
-    public Text lapCounter;
-    public Text gearText;
+    public Text lapCounter,gearText,speedText;
     private void Start(){
         findTimer();
         findNodes();
@@ -41,6 +40,7 @@ public class PlayerHover : Hover
 
     void FixedUpdate()
     {
+        calculateSpeed();
         CheckWaypointDistance();
         engineNoise();
         //currentSector = getSector();
@@ -107,5 +107,11 @@ public class PlayerHover : Hover
 
     private void showGear(){
         gearText.text = currentGear.ToString();
+    }
+
+    private void calculateSpeed(){
+        moveSpeed = (transform.position - lastPosition).magnitude;
+        lastPosition = transform.position;
+        speedText.text = (Mathf.Round(moveSpeed*100)).ToString()+" km/h";
     }
 }
