@@ -87,12 +87,14 @@ public class PlayerHover : Hover
                 accel += accelerationRate;
             }else{
                 shiftgear("up");
+                showGear();
             }            
         }else{
             if(accel > 0){
                 accel -= accelerationRate*4;
             }else{
                 shiftgear("down");
+                showGear();
             }
         }
         //check if reversing

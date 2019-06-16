@@ -169,10 +169,7 @@ public class Hover : MonoBehaviour
                 }
                 break;
         }
-        showGear();
     }    
-
-    protected void showGear(){}
     protected float getThrust(){
         float tempThrust = (powerInput * speed * accel * revMod[currentGear-1])+(powerInput * speed * gearValues[currentGear-1]);
         return tempThrust;
