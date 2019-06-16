@@ -7,8 +7,9 @@ using System.Linq;
 public class RaceOrderKeeper : MonoBehaviour
 {
     //ui
-    public Text UIconnection;
+    public Text RaceOrderText,PosNum;
     private int racerAmount;
+    private string playername;
     private Dictionary<string,float> raceStatus=  new Dictionary<string, float>();
     private List<string> racernames = new List<string>();
     //checkpointstuff
@@ -43,7 +44,8 @@ public class RaceOrderKeeper : MonoBehaviour
     }
     private void showOrder(){
         string tempstr = "";
-
+        int posCount = 1;
+        int Pos = 0;
         var items = from pair in raceStatus
                     orderby pair.Value ascending
                     select pair;
@@ -51,10 +53,14 @@ public class RaceOrderKeeper : MonoBehaviour
         // Display results.
         foreach (KeyValuePair<string, float> pair in items)
         {
-            tempstr += "\n" + pair.Key;
+            tempstr += "\n"+ posCount + ". " + pair.Key;
+            if (pair.Key == playername){
+                Pos = posCount;
+            }
+            posCount++;
         }
-
-        UIconnection.text=tempstr;
+        PosNum.text = postionText(Pos);
+        RaceOrderText.text=tempstr;
     }
 
     private void findRacers(){
@@ -64,6 +70,7 @@ public class RaceOrderKeeper : MonoBehaviour
         //player
         racerList.Add(playersShip.GetComponentInChildren<Hover>());
         racernames.Add(playersShip.GetComponentInChildren<Hover>().racerName);
+        playername = playersShip.GetComponentInChildren<Hover>().racerName;
         emptytimes.Add(0f);
         //aiships
         foreach(GameObject v in Aiships){
@@ -75,5 +82,21 @@ public class RaceOrderKeeper : MonoBehaviour
         raceStatus = racernames.Zip(emptytimes, (k, v) => new { Key = k, Value = v })
                      .ToDictionary(x => x.Key, x => x.Value);
     }
+
+    private string postionText(int position){
+        string posText = position.ToString();
+        if (position == 1){
+            posText += "st";
+        }else if (position == 2){
+            posText += "nd";
+        }else if (position == 3){
+            posText += "rd";
+        }else{
+            posText += "th";
+        }
+        return posText;
+    }
 }
+
+
  
