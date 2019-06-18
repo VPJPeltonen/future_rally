@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Timer : MonoBehaviour
 {
     //ui text locations for the lap timer, checkpoint times and lap time history
-    public Text timerText, checkpointText, lapHistory, checkpointDifference;
+    public Text timerText, totaltimerText, checkpointText, lapHistory, checkpointDifference;
     public Button backbutton;
     public PlayerHover player;
     public Countdown centerTextPlace;
@@ -19,7 +19,6 @@ public class Timer : MonoBehaviour
     //to keep track of checkpoint and lap
     private int currentCP = 0;
     private int currentL = 0;
-
     
     //array to store laptimes
     private float[] laptimes = new float[10];
@@ -42,7 +41,10 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        if(on){timerText.text = getTime(racestartTime) + "\n" + getTime(startTime);}
+        if(on){
+            totaltimerText.text = getTime(racestartTime);
+            timerText.text =  getTime(startTime);
+        }
     }
 
     //race starts
