@@ -11,6 +11,8 @@ public class Hover : MonoBehaviour
     protected Timer timer;
     protected int currentNode = 0;
     [Header("Enginestuff")]
+    //engine effect
+    public ParticleSystem thruster1, thruster2, turbo1,turbo2;
     //forward speed
     public float speed = 32f;
     //turning speed
@@ -90,10 +92,16 @@ public class Hover : MonoBehaviour
 
     //acceleration and turning
     protected void EngineControl(){
+        var em = thruster1.emission.rateOverTime;
         //forward power
         if (powerInput>0){
             var thrust = getThrust();
             shipRigidbody.AddRelativeForce(0f, 0f, thrust);
+            thruster1.enableEmission = true;
+            thruster2.enableEmission = true;
+        }else{
+            thruster1.enableEmission = false;
+            thruster2.enableEmission = false;
         }
         
         if (powerInput<0){

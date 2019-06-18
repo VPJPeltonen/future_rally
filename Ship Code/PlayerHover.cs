@@ -132,7 +132,15 @@ public class PlayerHover : Hover
             if(currentTurbo > 0){
                 shipRigidbody.AddRelativeForce(0f, 0f, turboPower);
                 currentTurbo -= 0.5f;              
+                turbo1.enableEmission = true;
+                turbo2.enableEmission = true;
+            }else{
+                turbo1.enableEmission = false;
+                turbo2.enableEmission = false;
             }
+        }else{
+            turbo1.enableEmission = false;
+            turbo2.enableEmission = false;
         }
         if (currentTurbo < maxTurbo){
             currentTurbo += 0.1f;
