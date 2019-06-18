@@ -19,7 +19,7 @@ public class PlayerHover : Hover
         findTimer();
         findNodes();
         findTrack();
-        lapCounter.text = "Lap \n 1/3";
+        lapCounter.text = "1/3";
         gearText.text = "1";
     }
 
@@ -85,7 +85,7 @@ public class PlayerHover : Hover
             }else{
                 currentCP = 0;
                 currentLaP += 1;                
-                lapCounter.text = "Lap\n" + (currentLaP+1)+"/3";
+                lapCounter.text = (currentLaP+1)+"/3";
             }
         }
     }
