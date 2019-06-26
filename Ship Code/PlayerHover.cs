@@ -131,20 +131,24 @@ public class PlayerHover : Hover
         if(turboInput){
             if(currentTurbo > 0){
                 shipRigidbody.AddRelativeForce(0f, 0f, turboPower);
-                currentTurbo -= 0.5f;              
-                turbo1.enableEmission = true;
-                turbo2.enableEmission = true;
+                currentTurbo -= 0.5f;
+                enableTurbo(true);                          
             }else{
-                turbo1.enableEmission = false;
-                turbo2.enableEmission = false;
+                enableTurbo(false);          
             }
         }else{
-            turbo1.enableEmission = false;
-            turbo2.enableEmission = false;
+            enableTurbo(false);
         }
         if (currentTurbo < maxTurbo){
-            currentTurbo += 0.1f;
+            currentTurbo += turboRegen;
         } 
         turboSlider.value = currentTurbo;
+    }
+
+    private void enableTurbo(bool select){
+        var em = turbo1.emission;
+        em.enabled = select;
+        em = turbo2.emission;
+        em.enabled = select;
     }
 }
