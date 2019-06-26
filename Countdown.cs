@@ -57,8 +57,8 @@ public class Countdown : MonoBehaviour
             }
         }
     }
-    public void finish(){
-        timerText.text = "FINISH!";
+    public void finish(string finishText){
+        timerText.text = finishText;
     }
 
     public void playCount(bool playednumber, AudioClip sound){

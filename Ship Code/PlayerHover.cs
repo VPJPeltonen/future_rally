@@ -19,6 +19,8 @@ public class PlayerHover : Hover
         findTimer();
         findNodes();
         findTrack();
+        //enableThrusters(false);
+        //enableTurbo(false);
         lapCounter.text = "1/3";
         gearText.text = "1";
     }

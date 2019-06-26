@@ -10,6 +10,7 @@ public class Timer : MonoBehaviour
     public Button backbutton;
     public PlayerHover player;
     public Countdown centerTextPlace;
+    public RaceOrderKeeper orderkeeper;
     public int maxLaps = 3;
     
     //timestamp for lap start and time amount for top lap time
@@ -63,9 +64,16 @@ public class Timer : MonoBehaviour
         checkpointText.text += getTime(startTime) + "\n";
         checkpoints[currentCP] = Time.time - startTime;
         if (currentL != 0){
-            string dif = (checkpoints[currentCP] - lastCheckpoints[currentCP]).ToString("f2");
+            float difF = checkpoints[currentCP] - lastCheckpoints[currentCP];
+            string difI;
            // Debug.Log(checkpoints[currentCP] + "-" + dif + "-" + lastCheckpoints[currentCP]);
-            checkpointDifference.text += dif + "\n";
+            if (difF >= 0){
+                difI = "+";
+            }else{
+                difI = "";
+            }
+            difI += (difF).ToString("f2");
+            checkpointDifference.text += difI + "\n";
         }
         //Debug.Log(checkpoints[currentCP]);
         currentCP++;
@@ -101,7 +109,9 @@ public class Timer : MonoBehaviour
         on = false;
         Cursor.visible = true;
         backbutton.gameObject.SetActive(true);
-        centerTextPlace.finish();
+        int pos = orderkeeper.pos;
+        string finishText = "Finish! \n" + "You finished " + pos + ".";
+        centerTextPlace.finish(finishText);
     }
 
     public void setOldTimes(){

@@ -9,6 +9,7 @@ public class RaceOrderKeeper : MonoBehaviour
     //ui
     public Text RaceOrderText,PosNum;
     private int racerAmount;
+    public int pos;
     private string playername;
     private Dictionary<string,float> raceStatus=  new Dictionary<string, float>();
     private List<string> racernames = new List<string>();
@@ -56,6 +57,7 @@ public class RaceOrderKeeper : MonoBehaviour
             tempstr += "\n"+ posCount + ". " + pair.Key;
             if (pair.Key == playername){
                 Pos = posCount;
+                pos = Pos;
             }
             posCount++;
         }
