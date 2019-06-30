@@ -11,6 +11,7 @@ public class Timer : MonoBehaviour
     public PlayerHover player;
     public Countdown centerTextPlace;
     public RaceOrderKeeper orderkeeper;
+    public GameObject background;
     public int maxLaps = 3;
     
     //timestamp for lap start and time amount for top lap time
@@ -109,6 +110,8 @@ public class Timer : MonoBehaviour
         on = false;
         Cursor.visible = true;
         backbutton.gameObject.SetActive(true);
+        background.gameObject.SetActive(false);
+        orderkeeper.RaceOn = false;
         int pos = orderkeeper.pos;
         string finishText = "Finish! \n" + "You finished " + pos + ".";
         centerTextPlace.finish(finishText);

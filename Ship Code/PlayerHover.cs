@@ -12,7 +12,7 @@ public class PlayerHover : Hover
     //turbostuff
     private float maxTurbo = 100f;
     private float currentTurbo = 0f;
-    private float turboRegen = 0.1f;
+    private float turboRegen = 0.05f;
     private bool turboInput;
     private float turboPower = 40f;
     private void Start(){
