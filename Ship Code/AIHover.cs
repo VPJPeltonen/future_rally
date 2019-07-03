@@ -169,4 +169,19 @@ public class AIHover : Hover
             return false;
         }
     }
+
+    public void setDifficulty(string difficulty){
+        Debug.Log(difficulty);
+        switch(difficulty){
+            case "easy":
+                speed = 40f;
+                break;
+            case "normal":
+                speed = 50f;
+                break;   
+            case "hard":
+                speed = 60f;
+                break;            
+        }
+    }
 }

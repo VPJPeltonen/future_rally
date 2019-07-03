@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagement : MonoBehaviour
 {
+    public GameObject loadingScreen;
     public void SceneLoad(int scene){
+        loadingScreen.gameObject.SetActive(true);
         SceneManager.LoadScene(scene);
     }
     public void QuitGame(){

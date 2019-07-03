@@ -78,18 +78,22 @@ public class RaceOrderKeeper : MonoBehaviour
         List<float> emptytimes = new List<float>();
         //player
         racerList.Add(playersShip.GetComponentInChildren<Hover>());
-        racernames.Add(playersShip.GetComponentInChildren<Hover>().racerName);
-        playername = playersShip.GetComponentInChildren<Hover>().racerName;
+        //racernames.Add(playersShip.GetComponentInChildren<Hover>().racerName);
+        //playername = playersShip.GetComponentInChildren<Hover>().racerName;
+        racernames.Add(GameController.PlayerName);
+        playername = GameController.PlayerName;
         emptytimes.Add(0f);
         //aiships
-        foreach(GameObject v in Aiships){
-            racerList.Add(v.GetComponentInChildren<Hover>());
-            emptytimes.Add(0f);
-            racernames.Add(v.GetComponentInChildren<Hover>().racerName);
+        if(GameController.Mode == "normal"){
+            foreach(GameObject v in Aiships){
+                racerList.Add(v.GetComponentInChildren<Hover>());
+                emptytimes.Add(0f);
+                racernames.Add(v.GetComponentInChildren<Hover>().racerName);
+            }
         }
         racerAmount = racerList.Count();
         raceStatus = racernames.Zip(emptytimes, (k, v) => new { Key = k, Value = v })
-                     .ToDictionary(x => x.Key, x => x.Value);
+                    .ToDictionary(x => x.Key, x => x.Value);        
     }
 
     private string postionText(int position){
