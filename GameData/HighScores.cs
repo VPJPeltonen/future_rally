@@ -45,11 +45,57 @@ public class HighScores : MonoBehaviour
             tempstr += "\n"+ pair.Key + ". " + pair.Value;
             //if (pair.Key == playername){
             //    Pos = posCount;
-            //    pos = Pos;
+            //    pos = Pos;    
             //}
             //posCount++;
         }
        // PosNum.text = postionText(Pos);
        /// RaceOrderText.text=tempstr;
+    }
+
+    public static string getTopNames(string selection){
+        string tempstr = "";
+
+        switch(selection){
+            case "lap":
+                var items = from pair in LTscores
+                            orderby pair.Value ascending
+                            select pair;
+                break;
+            case "total":
+                var items = from pair in TTscores
+                    orderby pair.Value ascending
+                    select pair;
+                break;
+        }
+        foreach (KeyValuePair<string, float> pair in items)
+        {
+            tempstr += "\n"+ pair.Key;
+        }
+        return tempstr;
+    }
+    public static string getTopTimes(string selection){
+        string tempstr = "";
+
+        switch(selection){
+            case "lap":
+                var items = from pair in LTscores
+                            orderby pair.Value ascending
+                            select pair;
+                break;
+            case "total":
+                var items = from pair in TTscores
+                    orderby pair.Value ascending
+                    select pair;
+                break;
+        }
+        
+
+
+        foreach (KeyValuePair<string, float> pair in items)
+        {
+            tempstr += "\n"+ pair.Value;
+        }
+        return tempstr;
     }
 }
