@@ -15,21 +15,6 @@ public class HighScores : MonoBehaviour
 
     public static Dictionary<string,float> TTscores=  new Dictionary<string, float>();
     public static Dictionary<string,float> LTscores=  new Dictionary<string, float>();
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void DisplayScores(){
-
-    }
 
     private void orderscores(Dictionary<string,float> list){
         string tempstr = "";
@@ -52,18 +37,23 @@ public class HighScores : MonoBehaviour
        // PosNum.text = postionText(Pos);
        /// RaceOrderText.text=tempstr;
     }
-
+ 
     public static string getTopNames(string selection){
         string tempstr = "";
-
+        IOrderedEnumerable<KeyValuePair<string, float>> items;
         switch(selection){
             case "lap":
-                var items = from pair in LTscores
+                items = from pair in LTscores
                             orderby pair.Value ascending
                             select pair;
                 break;
             case "total":
-                var items = from pair in TTscores
+                items = from pair in TTscores
+                    orderby pair.Value ascending
+                    select pair;
+                break;
+            default:
+                items = from pair in TTscores
                     orderby pair.Value ascending
                     select pair;
                 break;
@@ -76,18 +66,23 @@ public class HighScores : MonoBehaviour
     }
     public static string getTopTimes(string selection){
         string tempstr = "";
-
+        IOrderedEnumerable<KeyValuePair<string, float>> items;
         switch(selection){
             case "lap":
-                var items = from pair in LTscores
+                items = from pair in LTscores
                             orderby pair.Value ascending
                             select pair;
                 break;
             case "total":
-                var items = from pair in TTscores
+                items = from pair in TTscores
                     orderby pair.Value ascending
                     select pair;
                 break;
+            default:
+                items = from pair in TTscores
+                    orderby pair.Value ascending
+                    select pair;
+                break;                
         }
         
 
