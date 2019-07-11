@@ -16,9 +16,11 @@ public class HighScoresController : MonoBehaviour
         times.text = TimesString;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void switchDisplay(string selection){
+        string NamesString, TimesString;
+        NamesString = HighScores.getTopNames(selection);
+        TimesString = HighScores.getTopTimes(selection);
+        names.text = NamesString;
+        times.text = TimesString;
     }
 }

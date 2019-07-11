@@ -33,32 +33,10 @@ public class HighScores : MonoBehaviour
         new RacerScore("Turbo",85f),
         new RacerScore("Momo",90f)
     };
-/* 
-    private void orderscores(Dictionary<string,float> list){
-        string tempstr = "";
-        //int posCount = 1;
-        //int Pos = 0;
-        var items = from pair in list
-                    orderby pair.Value ascending
-                    select pair;
 
-        // Display results.
-        foreach (KeyValuePair<string, float> pair in items)
-        {
-            tempstr += "\n"+ pair.Key + ". " + pair.Value;
-            //if (pair.Key == playername){
-            //    Pos = posCount;
-            //    pos = Pos;    
-            //}
-            //posCount++;
-        }
-       // PosNum.text = postionText(Pos);
-       /// RaceOrderText.text=tempstr;
-    }*/
- 
     public static string getTopNames(string selection){
         string tempstr = "";
-        List<RacerScore> items = sortstuff(LTscores);
+        List<RacerScore> items = getList(selection);
         foreach (RacerScore score in items)
         {
             tempstr += "\n"+ score.racerName;
@@ -67,35 +45,30 @@ public class HighScores : MonoBehaviour
     }
     public static string getTopTimes(string selection){
         string tempstr = "";
-        List<RacerScore> items = sortstuff(LTscores);
+        List<RacerScore> items = getList(selection);
         foreach (RacerScore score in items)
         {
             tempstr += "\n"+ parseTime(score.time);
         }
         return tempstr;
-    }/* 
-    private static IOrderedEnumerable<KeyValuePair<string, float>> orderLists(string selection){
-        IOrderedEnumerable<KeyValuePair<string, float>> items;
+    } 
+
+    private static List<RacerScore> getList(string selection){
+        List<RacerScore> items;
         switch(selection){
             case "lap":
-                items = from pair in LTscores
-                            orderby pair.Value ascending
-                            select pair;
+                items = sortstuff(LTscores);
                 break;
             case "total":
-                items = from pair in TTscores
-                    orderby pair.Value ascending
-                    select pair;
+                items = sortstuff(TTscores);
                 break;
             default:
-                items = from pair in TTscores
-                    orderby pair.Value ascending
-                    select pair;
+                items = sortstuff(LTscores);
                 break;                
         }
         return items;
     }
-*/
+
     private static string parseTime(float time){
         string minutes = ((int) time/60).ToString();
         float secondsFloat = (float)time % 60;
