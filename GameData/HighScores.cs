@@ -8,22 +8,32 @@ public class HighScores : MonoBehaviour
     TT = total times
     LT = Lap Times
      */
-    public static List<string> TTracernames = new List<string>();
-    public static List<string> LTracernames = new List<string>();
-    public static List<float> TTtimes = new List<float>();
-    public static List<float> LTtimes = new List<float>();
 
-    public static Dictionary<string,float> TTscores=  new Dictionary<string, float>(){
-        {"ab",100f},
-        {"bs",200f},
-        {"bww",20f}
+    public static List<RacerScore> TTscores=  new List<RacerScore>(){
+        new RacerScore("Rasputin",135f),
+        new RacerScore("Steve Noname",150f),
+        new RacerScore("Turbo",165f),
+        new RacerScore("Max Speed",180f),
+        new RacerScore("Momo",195f),
+        new RacerScore("Rasputin",210f),
+        new RacerScore("Bob",225f),
+        new RacerScore("Totally Not A Dog",240f),
+        new RacerScore("Turbo",265f),
+        new RacerScore("Momo",280f)
     };
-    public static Dictionary<string,float> LTscores=  new Dictionary<string, float>(){
-        {"ab",100f},
-        {"bs",200f},
-        {"bww",20f}
+    public static List<RacerScore> LTscores=  new List<RacerScore>(){
+        new RacerScore("Rasputin",45f),
+        new RacerScore("Steve Noname",50f),
+        new RacerScore("Turbo",55f),
+        new RacerScore("Max Speed",60f),
+        new RacerScore("Momo",65f),
+        new RacerScore("Rasputin",70f),
+        new RacerScore("Bob",75f),
+        new RacerScore("Totally Not A Dog",80f),
+        new RacerScore("Turbo",85f),
+        new RacerScore("Momo",90f)
     };
-
+/* 
     private void orderscores(Dictionary<string,float> list){
         string tempstr = "";
         //int posCount = 1;
@@ -44,26 +54,26 @@ public class HighScores : MonoBehaviour
         }
        // PosNum.text = postionText(Pos);
        /// RaceOrderText.text=tempstr;
-    }
+    }*/
  
     public static string getTopNames(string selection){
         string tempstr = "";
-        IOrderedEnumerable<KeyValuePair<string, float>> items = orderLists(selection);
-        foreach (KeyValuePair<string, float> pair in items)
+        List<RacerScore> items = sortstuff(LTscores);
+        foreach (RacerScore score in items)
         {
-            tempstr += "\n"+ pair.Key;
+            tempstr += "\n"+ score.racerName;
         }
         return tempstr;
     }
     public static string getTopTimes(string selection){
         string tempstr = "";
-        IOrderedEnumerable<KeyValuePair<string, float>> items = orderLists(selection);
-        foreach (KeyValuePair<string, float> pair in items)
+        List<RacerScore> items = sortstuff(LTscores);
+        foreach (RacerScore score in items)
         {
-            tempstr += "\n"+ parseTime(pair.Value);
+            tempstr += "\n"+ parseTime(score.time);
         }
         return tempstr;
-    }
+    }/* 
     private static IOrderedEnumerable<KeyValuePair<string, float>> orderLists(string selection){
         IOrderedEnumerable<KeyValuePair<string, float>> items;
         switch(selection){
@@ -85,14 +95,19 @@ public class HighScores : MonoBehaviour
         }
         return items;
     }
+*/
     private static string parseTime(float time){
         string minutes = ((int) time/60).ToString();
         float secondsFloat = (float)time % 60;
         string seconds = secondsFloat.ToString("f2");
-        if (secondsFloat <= 10){
+        if (secondsFloat <= 9){
             seconds = "0" + secondsFloat.ToString("f2");
         }
         string timerTime = minutes + ":" + seconds;  
         return timerTime;
+    }
+    private static List<RacerScore> sortstuff(List<RacerScore> list){
+        list.Sort((s1, s2) => s1.time.CompareTo(s2.time));
+        return list;
     }
 }

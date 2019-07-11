@@ -99,7 +99,7 @@ public class Timer : MonoBehaviour
         string minutes = ((int) currentTime/60).ToString();
         float secondsFloat = (float)currentTime % 60;
         string seconds = secondsFloat.ToString("f2");
-        if (secondsFloat <= 10){
+        if (secondsFloat <= 9){
             seconds = "0" + secondsFloat.ToString("f2");
         }
         string timerTime = minutes + ":" + seconds;  
