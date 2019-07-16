@@ -51,9 +51,9 @@ public class Timer : MonoBehaviour
             totaltimerText.text = getTime(racestartTime);
             timerText.text =  getTime(startTime);
         }
-        if(Input.GetKeyUp(KeyCode.Tab)){
+        /* if(Input.GetKeyUp(KeyCode.Tab)){
             finishScreen();
-        }
+        }*/
     }
 
     //race starts
