@@ -11,11 +11,8 @@ public class HoverSounds : MonoBehaviour
     private const float SpeedToRevs = .01f;
     Vector3 myVelocity;
     Rigidbody carRigidbody;
-    
-    void Awake () 
-    {
-        carRigidbody = GetComponent<Rigidbody>();
-    }
+
+    void Awake() => carRigidbody = GetComponent<Rigidbody>();
 
     private void FixedUpdate()
     {

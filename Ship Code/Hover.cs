@@ -62,7 +62,6 @@ public class Hover : MonoBehaviour
         findTimer();
         findNodes();
         findTrack();
-        //enableThrusters(false);
     }
     
     protected void Awake () 
@@ -93,7 +92,6 @@ public class Hover : MonoBehaviour
 
     //acceleration and turning
     protected void EngineControl(){
-        //var em = thruster1.emission.rateOverTime;
         //forward power
         if (powerInput>0){
             var thrust = getThrust();

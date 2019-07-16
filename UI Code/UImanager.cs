@@ -5,13 +5,7 @@ using UnityEngine;
 public class UImanager : MonoBehaviour
 {
     public GameObject pausemenu;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyUp("escape") ){
@@ -31,7 +25,5 @@ public class UImanager : MonoBehaviour
         pausemenu.gameObject.SetActive(false);            
     }
 
-    public void Quit(){
-        Application.Quit();
-    }
+    public void Quit() => Application.Quit();
 }

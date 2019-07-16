@@ -8,29 +8,19 @@ public class PlayerSettings : MonoBehaviour
     [SerializeField]
     private Text playername, placeholder;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void Awake ()
     {
-        if (!PlayerPrefs.HasKey("playerName"))
+        if (PlayerPrefs.HasKey("playerName"))
         {
-            PlayerPrefs.SetString("playerName", playername.text);
-            PlayerPrefs.Save ();
-        }else{
-            string name = PlayerPrefs.GetString ("playerName");
-            Debug.Log(name);
+            string name = PlayerPrefs.GetString("playerName");
             playername.text = name;
             placeholder.text = name;
             GameController.setName2(name);
+        }
+        else
+        {
+            PlayerPrefs.SetString("playerName", playername.text);
+            PlayerPrefs.Save();
         }
     }
     public void saveName(string name){

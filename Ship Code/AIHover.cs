@@ -18,7 +18,8 @@ public class AIHover : Hover
     private bool avoiding;
     private bool accelerating;
 
-    void OnDrawGizmos(){//draws sensors to help see how far they reach
+    //draws sensors to help see how far they reach
+    void OnDrawGizmos(){
         shipRigidbody = GetComponent <Rigidbody>();
         CheckSensors();
     }
@@ -39,8 +40,7 @@ public class AIHover : Hover
 
     void FixedUpdate()
     {
-       // currentSector = getSector();
-       engineNoise();
+        engineNoise();
         if(engineOn){
             HoverShip();
             if(controlsActive){
@@ -61,9 +61,6 @@ public class AIHover : Hover
     private void SteerShip(){
         transform.LookAt(nodes[currentNode]);
 
-        //var q = Quaternion.LookRotation(nodes[currentNode].position - transform.position);
-        //transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed * Time.deltaTime);
-        
         stableRotation = Quaternion.Euler(xRotation,transform.eulerAngles.y, zRotation);
         transform.rotation = Quaternion.Lerp(transform.rotation, stableRotation,  Time.time * stabilizerPower);
     
@@ -93,6 +90,7 @@ public class AIHover : Hover
         sensorStartPos.y += sensorHeight;
         Vector3 forwardDir = transform.forward;
         sensorStartPos += forwardDir * sensorX;
+        
         avoiding = false;
         accelerating = true;
         float avoidNum = 0f;

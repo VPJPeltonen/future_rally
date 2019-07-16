@@ -19,8 +19,6 @@ public class PlayerHover : Hover
         findTimer();
         findNodes();
         findTrack();
-        //enableThrusters(false);
-        //enableTurbo(false);
         lapCounter.text = "1/3";
         gearText.text = "1";
     }
@@ -55,7 +53,6 @@ public class PlayerHover : Hover
         calculateSpeed();
         CheckWaypointDistance();
         engineNoise();
-        //currentSector = getSector();
         if(engineOn){
             HoverShip();
             if(controlsActive){EngineControl();}
@@ -122,9 +119,7 @@ public class PlayerHover : Hover
         }
     }
 
-    private void showGear(){
-        gearText.text = currentGear.ToString();
-    }
+    private void showGear() => gearText.text = currentGear.ToString();
 
     private void calculateSpeed(){
         moveSpeed = (transform.position - lastPosition).magnitude;

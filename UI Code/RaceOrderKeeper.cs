@@ -8,17 +8,15 @@ public class RaceOrderKeeper : MonoBehaviour
 {
     //ui
     public Text RaceOrderText,PosNum;
-    
     private int racerAmount;
     public int pos;
     private string playername;
     private Dictionary<string,float> raceStatus=  new Dictionary<string, float>();
     private List<string> racernames = new List<string>();
     //checkpointstuff
-    public Transform Checkpoints;
+    public Transform Checkpoints, player;
     //Racers
     [Header("Racers")]
-    public Transform player;
     private List<Hover> racerList = new List<Hover>();
     private Transform[] checkPointList;
     private int delayCounter = 0; 
@@ -78,8 +76,6 @@ public class RaceOrderKeeper : MonoBehaviour
         List<float> emptytimes = new List<float>();
         //player
         racerList.Add(playersShip.GetComponentInChildren<Hover>());
-        //racernames.Add(playersShip.GetComponentInChildren<Hover>().racerName);
-        //playername = playersShip.GetComponentInChildren<Hover>().racerName;
         racernames.Add(GameController.PlayerName);
         playername = GameController.PlayerName;
         emptytimes.Add(0f);

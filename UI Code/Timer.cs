@@ -51,9 +51,6 @@ public class Timer : MonoBehaviour
             totaltimerText.text = getTime(racestartTime);
             timerText.text =  getTime(startTime);
         }
-        /* if(Input.GetKeyUp(KeyCode.Tab)){
-            finishScreen();
-        }*/
     }
 
     //race starts
@@ -71,7 +68,6 @@ public class Timer : MonoBehaviour
         if (currentL != 0){
             float difF = checkpoints[currentCP] - lastCheckpoints[currentCP];
             string difI;
-           // Debug.Log(checkpoints[currentCP] + "-" + dif + "-" + lastCheckpoints[currentCP]);
             if (difF >= 0){
                 difI = "+";
             }else{
@@ -80,7 +76,6 @@ public class Timer : MonoBehaviour
             difI += (difF).ToString("f2");
             checkpointDifference.text += difI + "\n";
         }
-        //Debug.Log(checkpoints[currentCP]);
         currentCP++;
     }
 
@@ -96,11 +91,8 @@ public class Timer : MonoBehaviour
         setOldTimes();
         currentCP = 0;
         checkpointText.text = "";
-        //if (currentL >= 1){
-            startTime = Time.time;
-        //}
+        startTime = Time.time;
         currentL++;
-
     }
 
     string getTime(float selectedTime){
@@ -138,8 +130,6 @@ public class Timer : MonoBehaviour
     private void finishScreen(){
         on = false;
         Cursor.visible = true;
-      //  backbutton.gameObject.SetActive(true);
-      //  background.gameObject.SetActive(false);
         finalscreen.gameObject.SetActive(true);
         orderkeeper.RaceOn = false;
         int pos = orderkeeper.pos;

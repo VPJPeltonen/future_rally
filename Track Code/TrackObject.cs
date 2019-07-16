@@ -6,10 +6,7 @@ public class TrackObject : MonoBehaviour
 {
     protected Timer timekeeper;
     // Start is called before the first frame update
-    void Start()
-    {
-        findTimer();
-    }
+    void Start() => findTimer();
 
     protected void findTimer(){
         GameObject timerholder = GameObject.FindWithTag("Timekeeper"); 

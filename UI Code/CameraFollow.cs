@@ -11,14 +11,10 @@ public class CameraFollow : MonoBehaviour
     
     Transform camT;
     public Vector3 velocity = Vector3.one;
-    
-    void Awake(){
-        camT = transform;
-    }
 
-    void FixedUpdate(){
-        SmoothFollow();
-    }
+    void Awake() => camT = transform;
+
+    void FixedUpdate() => SmoothFollow();
 
     void SmoothFollow(){
         Vector3 toPos = target.position + (target.rotation * defaultDistance);

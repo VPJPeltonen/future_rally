@@ -47,21 +47,23 @@ public class HighScores : MonoBehaviour
             tempstr += "\n"+ parseTime(score.time);
         }
         return tempstr;
-    } 
-
-    public static List<RacerScore> getTopLaptimes(){
-        return LTscores;
     }
+
+    public static List<RacerScore> getTopLaptimes() => LTscores;
+
     public static void setToptimes(List<RacerScore> laptimes, List<RacerScore> totaltimes){
-        LTscores = laptimes;
-        TTscores = totaltimes;
+        LTscores = laptimes ?? throw new System.ArgumentNullException(nameof(laptimes));
+        TTscores = totaltimes ?? throw new System.ArgumentNullException(nameof(totaltimes));
     }
 
-    public static List<RacerScore> getTopTotaltimes(){
-        return TTscores;
-    }
+    public static List<RacerScore> getTopTotaltimes() => TTscores;
 
     private static List<RacerScore> getList(string selection){
+        if (selection is null)
+        {
+            throw new System.ArgumentNullException(nameof(selection));
+        }
+
         List<RacerScore> items;
         switch(selection){
             case "lap":
@@ -78,21 +80,31 @@ public class HighScores : MonoBehaviour
     }
 
     private static string parseTime(float time){
-        string minutes = ((int) time/60).ToString();
         float secondsFloat = (float)time % 60;
         string seconds = secondsFloat.ToString("f2");
         if (secondsFloat <= 9){
             seconds = "0" + secondsFloat.ToString("f2");
         }
-        string timerTime = minutes + ":" + seconds;  
+        string minutes = ((int)time / 60).ToString();
+        string timerTime = minutes + ":" + seconds;
         return timerTime;
     }
     private static List<RacerScore> sortstuff(List<RacerScore> list){
+        if (list is null)
+        {
+            throw new System.ArgumentNullException(nameof(list));
+        }
+
         list.Sort((s1, s2) => s1.time.CompareTo(s2.time));
         return list;
     }
 
     public static void newLapTime(string racerName,float time){
+        if (racerName is null)
+        {
+            throw new System.ArgumentNullException(nameof(racerName));
+        }
+
         RacerScore newScore = new RacerScore(racerName,time); 
         //add new time to list
         LTscores.Add(newScore);
@@ -101,6 +113,11 @@ public class HighScores : MonoBehaviour
         LTscores.RemoveAt(9);
     }
     public static void newTotalTime(string racerName, float time){
+        if (racerName is null)
+        {
+            throw new System.ArgumentNullException(nameof(racerName));
+        }
+
         RacerScore newScore = new RacerScore(racerName,time); 
         //add new time to list
         TTscores.Add(newScore);

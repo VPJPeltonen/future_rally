@@ -7,6 +7,7 @@ public class HighScoresController : MonoBehaviour
 {
     public Text names,times;
     public GameController game;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,9 +25,5 @@ public class HighScoresController : MonoBehaviour
         TimesString = HighScores.getTopTimes(selection);
         names.text = NamesString;
         times.text = TimesString;
-    }
-
-    public void addLapTime(float time){
-
     }
 }

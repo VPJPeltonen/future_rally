@@ -9,18 +9,10 @@ public class ModeControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-        Debug.Log(GameController.PlayerName);
         disable();
         difficulty();
     }
-    protected void Awake () {
-   
-    }
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
     private void disable(){
         if(GameController.Mode == "solo"){
             AIships.SetActive(false);
@@ -35,7 +27,6 @@ public class ModeControl : MonoBehaviour
                 AIlist.Add(v.GetComponentInChildren<AIHover>());
             }
             foreach(AIHover v in AIlist){
-                //AIlist.Add(v.GetComponentInChildren<AIHover>());
                 v.setDifficulty(GameController.Difficulty);
             }
         }
