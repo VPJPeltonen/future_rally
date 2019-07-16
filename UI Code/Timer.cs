@@ -11,7 +11,7 @@ public class Timer : MonoBehaviour
     public PlayerHover player;
     public Countdown centerTextPlace;
     public RaceOrderKeeper orderkeeper;
-    public GameObject background;
+    public GameObject background, finalscreen;
     public GameController game;
     public int maxLaps = 3;
     
@@ -50,6 +50,9 @@ public class Timer : MonoBehaviour
         if(on){
             totaltimerText.text = getTime(racestartTime);
             timerText.text =  getTime(startTime);
+        }
+        if(Input.GetKeyUp(KeyCode.Tab)){
+            finishScreen();
         }
     }
 
@@ -117,17 +120,8 @@ public class Timer : MonoBehaviour
         var playerName = GameController.getName();
         var playerTime = Time.time - racestartTime; 
         HighScores.newTotalTime(playerName,playerTime);
-
         game.SaveGame();
-
-        on = false;
-        Cursor.visible = true;
-        backbutton.gameObject.SetActive(true);
-        background.gameObject.SetActive(false);
-        orderkeeper.RaceOn = false;
-        int pos = orderkeeper.pos;
-        string finishText = "Finish! \n" + "You finished " + pos + ".";
-        centerTextPlace.finish(finishText);
+        finishScreen();
     }
 
     public void setOldTimes(){
@@ -139,5 +133,30 @@ public class Timer : MonoBehaviour
         for(int i = 0; i < 3; i++){
             lastCheckpoints[i] = checkpoints[i];
         }
+    }
+
+    private void finishScreen(){
+        on = false;
+        Cursor.visible = true;
+      //  backbutton.gameObject.SetActive(true);
+      //  background.gameObject.SetActive(false);
+        finalscreen.gameObject.SetActive(true);
+        orderkeeper.RaceOn = false;
+        int pos = orderkeeper.pos;
+        string finishText = "Finish! \n" + "You finished " + postionText(pos);
+        centerTextPlace.finish(finishText);
+    }
+    private string postionText(int position){
+        string posText = position.ToString();
+        if (position == 1){
+            posText += "st";
+        }else if (position == 2){
+            posText += "nd";
+        }else if (position == 3){
+            posText += "rd";
+        }else{
+            posText += "th";
+        }
+        return posText;
     }
 }
