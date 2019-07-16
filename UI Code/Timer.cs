@@ -12,6 +12,7 @@ public class Timer : MonoBehaviour
     public Countdown centerTextPlace;
     public RaceOrderKeeper orderkeeper;
     public GameObject background;
+    public GameController game;
     public int maxLaps = 3;
     
     //timestamp for lap start and time amount for top lap time
@@ -82,7 +83,12 @@ public class Timer : MonoBehaviour
 
     //when player finishes lap
     public void FinishLap(){
+        //save laptime
         lapHistory.text += getTime(startTime) + "\n";
+        var playerName = GameController.getName();
+        var playerTime = Time.time - startTime; 
+
+        HighScores.newLapTime(playerName,playerTime);
         laptimes[currentL] = Time.time - startTime;
         setOldTimes();
         currentCP = 0;
@@ -107,6 +113,13 @@ public class Timer : MonoBehaviour
     }
 
     public void endRace(){
+        //save total time
+        var playerName = GameController.getName();
+        var playerTime = Time.time - racestartTime; 
+        HighScores.newTotalTime(playerName,playerTime);
+
+        game.SaveGame();
+
         on = false;
         Cursor.visible = true;
         backbutton.gameObject.SetActive(true);

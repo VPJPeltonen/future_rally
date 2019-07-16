@@ -1,14 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 public class HighScores : MonoBehaviour
 {
-    /*
-    TT = total times
-    LT = Lap Times
-     */
-
+    //TT = total times
+    //LT = Lap Times
     public static List<RacerScore> TTscores=  new List<RacerScore>(){
         new RacerScore("Rasputin",135f),
         new RacerScore("Steve Noname",150f),
@@ -25,9 +21,9 @@ public class HighScores : MonoBehaviour
         new RacerScore("Rasputin",45f),
         new RacerScore("Steve Noname",50f),
         new RacerScore("Turbo",55f),
+        new RacerScore("Rasputin",70f),
         new RacerScore("Max Speed",60f),
         new RacerScore("Momo",65f),
-        new RacerScore("Rasputin",70f),
         new RacerScore("Bob",75f),
         new RacerScore("Totally Not A Dog",80f),
         new RacerScore("Turbo",85f),
@@ -52,6 +48,18 @@ public class HighScores : MonoBehaviour
         }
         return tempstr;
     } 
+
+    public static List<RacerScore> getTopLaptimes(){
+        return LTscores;
+    }
+    public static void setToptimes(List<RacerScore> laptimes, List<RacerScore> totaltimes){
+        LTscores = laptimes;
+        TTscores = totaltimes;
+    }
+
+    public static List<RacerScore> getTopTotaltimes(){
+        return TTscores;
+    }
 
     private static List<RacerScore> getList(string selection){
         List<RacerScore> items;
@@ -82,5 +90,22 @@ public class HighScores : MonoBehaviour
     private static List<RacerScore> sortstuff(List<RacerScore> list){
         list.Sort((s1, s2) => s1.time.CompareTo(s2.time));
         return list;
+    }
+
+    public static void newLapTime(string racerName,float time){
+        RacerScore newScore = new RacerScore(racerName,time); 
+        //add new time to list
+        LTscores.Add(newScore);
+        //drop lowest
+        LTscores = sortstuff(LTscores);
+        LTscores.RemoveAt(9);
+    }
+    public static void newTotalTime(string racerName, float time){
+        RacerScore newScore = new RacerScore(racerName,time); 
+        //add new time to list
+        TTscores.Add(newScore);
+        //drop lowest
+        TTscores = sortstuff(TTscores);
+        TTscores.RemoveAt(9);
     }
 }

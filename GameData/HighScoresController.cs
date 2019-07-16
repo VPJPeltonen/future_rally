@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class HighScoresController : MonoBehaviour
 {
     public Text names,times;
+    public GameController game;
     // Start is called before the first frame update
     void Start()
     {
+        game.LoadGame();
         string NamesString, TimesString;
         NamesString = HighScores.getTopNames("lap");
         TimesString = HighScores.getTopTimes("lap");
@@ -22,5 +24,9 @@ public class HighScoresController : MonoBehaviour
         TimesString = HighScores.getTopTimes(selection);
         names.text = NamesString;
         times.text = TimesString;
+    }
+
+    public void addLapTime(float time){
+
     }
 }
