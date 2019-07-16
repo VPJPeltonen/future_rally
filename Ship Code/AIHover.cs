@@ -80,7 +80,7 @@ public class AIHover : Hover
                 shiftgear("up");
             }   
         }else{
-            if(accel > 0){
+            if(accel > 0 && Time.timeScale == 1){
                 accel -= accelerationRate;
             }else{
                 shiftgear("down");

@@ -93,28 +93,31 @@ public class PlayerHover : Hover
     }
 
     private void gearBox(){
-        //check if driver is accelerating
-        if(powerInput>0){
-            if(accel < 1){
-                accel += accelerationRate;
+        //if not paused
+        if(Time.timeScale == 1){
+            //check if driver is accelerating
+            if(powerInput>0){
+                if(accel < 1){
+                    accel += accelerationRate;
+                }else{
+                    shiftgear("up");
+                    showGear();
+                }            
             }else{
-                shiftgear("up");
-                showGear();
-            }            
-        }else{
-            if(accel > 0){
-                accel -= accelerationRate*4;
-            }else{
-                shiftgear("down");
-                showGear();
+                if(accel > 0){
+                    accel -= accelerationRate*4;
+                }else{
+                    shiftgear("down");
+                    showGear();
+                }
             }
-        }
-        //check if reversing
-        if(reverseAccel < 1 && powerInput<0){
-            reverseAccel += accelerationRate;
-        }else{
-            if(reverseAccel > 0){
-                reverseAccel -= accelerationRate;
+            //check if reversing
+            if(reverseAccel < 1 && powerInput<0){
+                reverseAccel += accelerationRate;
+            }else{
+                if(reverseAccel > 0){
+                    reverseAccel -= accelerationRate;
+                }
             }
         }
     }
