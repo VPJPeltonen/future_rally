@@ -182,4 +182,9 @@ public class AIHover : Hover
                 break;            
         }
     }
+    //disable ship if hit stuff
+    private void OnCollisionEnter(Collision collision){
+        engineOn = false;
+        crash.Play(0);
+    }
 }

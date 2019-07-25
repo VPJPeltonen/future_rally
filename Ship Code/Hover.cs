@@ -46,7 +46,7 @@ public class Hover : MonoBehaviour
     protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.4f, 0.2f };
 
     [Header("Audio stuff")]
-    public AudioSource engineSound;
+    public AudioSource engineSound, crash, crash2;
     private float jetPitch;
     private const float LowPitch = 0.2f;
     private const float HighPitch = 2f;
@@ -73,8 +73,7 @@ public class Hover : MonoBehaviour
         xRotation = transform.eulerAngles.x;
     }
 
-    //disable ship if hit stuff
-    protected void OnCollisionEnter(Collision collision) => engineOn = false;
+    
 
     //hovering code
     protected void HoverShip(){

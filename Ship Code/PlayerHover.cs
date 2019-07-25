@@ -9,6 +9,7 @@ public class PlayerHover : Hover
     public GameObject hitScreen;
     public Text lapCounter,gearText,speedText;
     public Slider engineSlider, turboSlider;   
+    public CameraFollow camera;
     //turbostuff
     private float maxTurbo = 100f;
     private float currentTurbo = 0f;
@@ -42,6 +43,7 @@ public class PlayerHover : Hover
             currentGear = 1;
             if(collissionTimer >= 150){
                 engineOn = true;
+                camera.playerStatusUpdate("starting");
                 collissionTimer = 0;
             }
         }
@@ -150,5 +152,18 @@ public class PlayerHover : Hover
         em.enabled = select;
         em = turbo2.emission;
         em.enabled = select;
+    }
+    //disable ship if hit stuff
+    private void OnCollisionEnter(Collision collision){
+        float noise = Random.Range(-1f, 1f);
+        engineOn = false;
+        if(noise > 0){
+            crash.Play(0);
+        }else{
+            crash2.Play(0);
+        }
+        camera.playerStatusUpdate("crashed");
+        
+        //CameraShaker.Instance.ShakeOnce(4f, 4f, 0.1f, 2f);
     }
 }
