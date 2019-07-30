@@ -27,12 +27,9 @@ public class PlayerHover : Hover
     void Update () 
     {
         if(engineOn){
-            hitScreen.gameObject.SetActive(false);
-            //get controls
-            powerInput = Input.GetAxisRaw ("Vertical");
-            turnInput = Input.GetAxis ("Horizontal");
-            turboInput = Input.GetButton("Jump"); 
+            hitScreen.gameObject.SetActive(false);     
             if(controlsActive){
+                getInput();
                 gearBox();
                 turboBooster();
             }
@@ -60,8 +57,7 @@ public class PlayerHover : Hover
             if(controlsActive){EngineControl();}
         }
     }
-    //start controls 
-    public void startRace() => controlsActive = true;
+
 
     private void CheckWaypointDistance(){
         if(Vector3.Distance(transform.position, nodes[currentNode].position) < 100f){ 
@@ -165,5 +161,18 @@ public class PlayerHover : Hover
         camera.playerStatusUpdate("crashed");
         
         //CameraShaker.Instance.ShakeOnce(4f, 4f, 0.1f, 2f);
+    }
+
+    private void getInput(){
+        powerInput = Input.GetAxisRaw ("Vertical");
+        turnInput = Input.GetAxis ("Horizontal");
+        turboInput = Input.GetButton("Jump"); 
+    }
+
+    //start controls 
+    public void startRace() => controlsActive = true;
+
+    public void godMode(bool status){
+        controlsActive = status;
     }
 }
