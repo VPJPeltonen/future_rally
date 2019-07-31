@@ -14,7 +14,7 @@ public class PlayerHover : Hover
     private float maxTurbo = 100f;
     private float currentTurbo = 0f;
     private float turboRegen = 0.05f;
-    private bool turboInput;
+    private bool turboInput,playing;
     private float turboPower = 40f;
     private void Start(){
         findTimer();
@@ -130,12 +130,20 @@ public class PlayerHover : Hover
             if(currentTurbo > 0){
                 shipRigidbody.AddRelativeForce(0f, 0f, turboPower);
                 currentTurbo -= 0.5f;
+                if (!playing){
+                    turboSound.Play(0);
+                    playing = true;
+                }
                 enableTurbo(true);                          
             }else{
-                enableTurbo(false);          
+                enableTurbo(false);       
+                turboSound.Stop();   
+                playing = false;
             }
         }else{
             enableTurbo(false);
+            turboSound.Stop();   
+            playing = false;
         }
         if (currentTurbo < maxTurbo){
             currentTurbo += turboRegen;
@@ -145,6 +153,7 @@ public class PlayerHover : Hover
 
     private void enableTurbo(bool select){
         var em = turbo1.emission;
+        //turboSound.Play(0);
         em.enabled = select;
         em = turbo2.emission;
         em.enabled = select;

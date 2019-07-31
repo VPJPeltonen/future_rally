@@ -10,7 +10,7 @@ public class Countdown : MonoBehaviour
     public PlayerHover player;
     public Transform AIShips;
     public AudioClip one,two,three,go;
-
+    public CameraFollow camera;
     private bool stop = false;
     private float startTime;
     private float volume = 0.7f;
@@ -70,6 +70,7 @@ public class Countdown : MonoBehaviour
         goplayed = true;
         timer.startRace();
         player.startRace();
+        camera.startRace();
         for (int i = 0; i < AIlist.Length; i++){
             AIlist[i].startRace();
         }                    

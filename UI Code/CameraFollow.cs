@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
+    public AudioSource music;
     public Vector3 defaultDistance = new Vector3(0f,0.8f,-1f);
     private float powerInput,turnInput;
     public float distanceDamp = 0.1f;
@@ -43,11 +44,11 @@ public class CameraFollow : MonoBehaviour
             if(state == "god"){
                 state = "normal";
                 player.godMode(false);
-                UI.gameObject.SetActive(false);
+                UI.gameObject.SetActive(true);
             }else{
                 state = "god";
-                player.godMode(false);
-                UI.gameObject.SetActive(true);
+                player.godMode(true);
+                UI.gameObject.SetActive(false);
             }
         }
     }
@@ -117,7 +118,11 @@ public class CameraFollow : MonoBehaviour
             transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
         }
         //ship turning and tilting
-        cameraBody.AddRelativeForce(100f*turnInput, 0f, 100f* powerInput);
+        cameraBody.AddRelativeForce(200f*turnInput, 0f, 200f* powerInput);
 //        camT.AddRelativeTorque(0f, turnInput * 1f, -(turnInput * 1f));
+    }
+
+    public void startRace(){
+        music.Play(0);
     }
 }

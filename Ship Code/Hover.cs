@@ -46,7 +46,7 @@ public class Hover : MonoBehaviour
     protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.4f, 0.2f };
 
     [Header("Audio stuff")]
-    public AudioSource engineSound, crash, crash2;
+    public AudioSource engineSound, thrusterSound, turboSound, crash, crash2;
     private float jetPitch;
     private const float LowPitch = 0.2f;
     private const float HighPitch = 2f;
@@ -146,16 +146,12 @@ public class Hover : MonoBehaviour
         checkPointList = trackholder.GetComponentsInChildren<Transform>(); 
     }
 
-    public void checkPoint(int CPnum){
-        //check if last checkpoint has been passed 
-        if (CPnum == currentCP+1){
-            currentCP = CPnum;
-        }
-    }
+
     protected void engineNoise(){
         var gearmod = gearValues[currentGear-1]/2;
         float engineRevs = Mathf.Abs (accel+gearmod) * SpeedToRevs;
         engineSound.pitch = Mathf.Clamp (engineRevs, LowPitch+gearmod, HighPitch+gearmod);       
+        thrusterSound.pitch = Mathf.Clamp (engineRevs, LowPitch+gearmod, HighPitch+gearmod);       
     }
 
     protected void shiftgear(string direction){
@@ -184,5 +180,12 @@ public class Hover : MonoBehaviour
         em.enabled = select;
         em = thruster2.emission;
         em.enabled = select;
+    }
+
+    public void checkPoint(int CPnum){
+        //check if last checkpoint has been passed 
+        if (CPnum == currentCP+1){
+            currentCP = CPnum;
+        }
     }
 }
