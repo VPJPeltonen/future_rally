@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Countdown : MonoBehaviour
 {
-    public Text timerText;
+    public TextMeshProUGUI timerText;
     public Timer timer;
     public PlayerHover player;
     public Transform AIShips;

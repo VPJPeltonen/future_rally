@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerHover : Hover
 {
     //uistuff
     public GameObject hitScreen;
-    public Text lapCounter,gearText,speedText;
+    public TextMeshProUGUI lapCounter,gearText,speedText;
     public Slider engineSlider, turboSlider;   
     public CameraFollow camera;
     //turbostuff
@@ -16,6 +17,7 @@ public class PlayerHover : Hover
     private float turboRegen = 0.05f;
     private bool turboInput,playing;
     private float turboPower = 40f;
+    private int collissionImmunity = 0;
     private void Start(){
         findTimer();
         findNodes();
@@ -52,6 +54,9 @@ public class PlayerHover : Hover
         calculateSpeed();
         CheckWaypointDistance();
         engineNoise();
+        if (collissionImmunity > 0){
+            collissionImmunity--;
+        }
         if(engineOn){
             HoverShip();
             if(controlsActive){EngineControl();}
@@ -161,15 +166,16 @@ public class PlayerHover : Hover
     //disable ship if hit stuff
     private void OnCollisionEnter(Collision collision){
         float noise = Random.Range(-1f, 1f);
-        engineOn = false;
         if(noise > 0){
             crash.Play(0);
         }else{
             crash2.Play(0);
         }
-        camera.playerStatusUpdate("crashed");
-        
-        //CameraShaker.Instance.ShakeOnce(4f, 4f, 0.1f, 2f);
+        if(collissionImmunity < 1){
+            collissionImmunity = 240;
+            engineOn = false;
+            camera.playerStatusUpdate("crashed");
+        }
     }
 
     private void getInput(){

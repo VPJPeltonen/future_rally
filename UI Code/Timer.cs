@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Timer : MonoBehaviour
 {
     //ui text locations for the lap timer, checkpoint times and lap time history
-    public Text timerText, totaltimerText, checkpointText, bestCheckpoints, checkpointDifference, lapHistory;
+    public TextMeshProUGUI timerText, totaltimerText, checkpointText, bestCheckpoints, checkpointDifference, lapHistory;
     public Button backbutton;
     public PlayerHover player;
     public Countdown centerTextPlace;
@@ -14,6 +15,7 @@ public class Timer : MonoBehaviour
     public GameObject background, finalscreen;
     public GameController game;
     public int maxLaps = 3;
+    public string track;
     
     //timestamp for lap start and time amount for top lap time
     private float startTime, toplap, racestartTime;
@@ -86,7 +88,7 @@ public class Timer : MonoBehaviour
         var playerName = GameController.getName();
         var playerTime = Time.time - startTime; 
 
-        HighScores.newLapTime(playerName,playerTime);
+        HighScores.newLapTime(playerName,playerTime,track);
         laptimes[currentL] = Time.time - startTime;
         setOldTimes();
         currentCP = 0;
@@ -111,7 +113,7 @@ public class Timer : MonoBehaviour
         //save total time
         var playerName = GameController.getName();
         var playerTime = Time.time - racestartTime; 
-        HighScores.newTotalTime(playerName,playerTime);
+        HighScores.newTotalTime(playerName,playerTime,track);
         game.SaveGame();
         finishScreen();
     }

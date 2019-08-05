@@ -19,16 +19,16 @@ public class HighScores : MonoBehaviour
         new RacerScore("Turbo",265f,"ancient city"),
         new RacerScore("Momo",280f,"ancient city"),
         
-        new RacerScore("Ras2putin",135f,"deep desert"),
-        new RacerScore("Steve Noname",150f,"deep desert"),
-        new RacerScore("Turbo",165f,"deep desert"),
-        new RacerScore("Max Speed",180f,"deep desert"),
-        new RacerScore("Momo",195f,"deep desert"),
-        new RacerScore("Rasputin",210f,"deep desert"),
-        new RacerScore("Bob",225f,"deep desert"),
-        new RacerScore("Totally Not A Dog",240f,"deep desert"),
-        new RacerScore("Turbo",265f,"deep desert"),
-        new RacerScore("Momo",280f,"deep desert"),
+        new RacerScore("Ras2putin",195f,"deep desert"),
+        new RacerScore("Steve Noname",210f,"deep desert"),
+        new RacerScore("Turbo",225f,"deep desert"),
+        new RacerScore("Max Speed",240f,"deep desert"),
+        new RacerScore("Momo",255f,"deep desert"),
+        new RacerScore("Rasputin",270f,"deep desert"),
+        new RacerScore("Bob",285f,"deep desert"),
+        new RacerScore("Totally Not A Dog",300f,"deep desert"),
+        new RacerScore("Turbo",315f,"deep desert"),
+        new RacerScore("Momo",330f,"deep desert"),
 
         new RacerScore("Rasput3in",135f,"great cliff"),
         new RacerScore("Steve Noname",150f,"great cliff"),
@@ -53,16 +53,16 @@ public class HighScores : MonoBehaviour
         new RacerScore("Turbo",85f,"ancient city"),
         new RacerScore("Momo",90f,"ancient city"),
 
-        new RacerScore("Raspu2tin",45f,"deep desert"),
-        new RacerScore("Steve Noname",50f,"deep desert"),
-        new RacerScore("Turbo",55f,"deep desert"),
-        new RacerScore("Rasputin",70f,"deep desert"),
-        new RacerScore("Max Speed",60f,"deep desert"),
-        new RacerScore("Momo",65f,"deep desert"),
-        new RacerScore("Bob",75f,"deep desert"),
-        new RacerScore("Totally Not A Dog",80f,"deep desert"),
-        new RacerScore("Turbo",85f,"deep desert"),
-        new RacerScore("Momo",90f,"deep desert"),        
+        new RacerScore("Raspu2tin",65f,"deep desert"),
+        new RacerScore("Steve Noname",70f,"deep desert"),
+        new RacerScore("Turbo",75f,"deep desert"),
+        new RacerScore("Rasputin",80f,"deep desert"),
+        new RacerScore("Max Speed",85f,"deep desert"),
+        new RacerScore("Momo",90f,"deep desert"),
+        new RacerScore("Bob",95f,"deep desert"),
+        new RacerScore("Totally Not A Dog",100f,"deep desert"),
+        new RacerScore("Turbo",105f,"deep desert"),
+        new RacerScore("Momo",110f,"deep desert"),        
 
         new RacerScore("Rasp3utin",45f,"great cliff"),
         new RacerScore("Steve Noname",50f,"great cliff"),
@@ -148,34 +148,33 @@ public class HighScores : MonoBehaviour
         foreach (RacerScore item in items){
             Debug.Log(item.racerName);
         }
-        //list.Sort((s1, s2) => s1.time.CompareTo(s2.time));
         return items.ToList();
     }
 
-    public static void newLapTime(string racerName,float time){
+    public static void newLapTime(string racerName,float time, string usedTrack){
         if (racerName is null)
         {
             throw new System.ArgumentNullException(nameof(racerName));
         }
 
-        RacerScore newScore = new RacerScore(racerName,time,"temp"); 
+        RacerScore newScore = new RacerScore(racerName,time,usedTrack); 
         //add new time to list
         LTscores.Add(newScore);
         //drop lowest
-        LTscores = sortstuff(LTscores, "ancient city");
-        LTscores.RemoveAt(9);
+        //LTscores = sortstuff(LTscores, "ancient city");
+        //LTscores.RemoveAt(9);
     }
-    public static void newTotalTime(string racerName, float time){
+    public static void newTotalTime(string racerName, float time, string usedTrack){
         if (racerName is null)
         {
             throw new System.ArgumentNullException(nameof(racerName));
         }
 
-        RacerScore newScore = new RacerScore(racerName,time, "temp"); 
+        RacerScore newScore = new RacerScore(racerName,time,usedTrack); 
         //add new time to list
         TTscores.Add(newScore);
         //drop lowest
-        TTscores = sortstuff(TTscores , "ancient city");
-        TTscores.RemoveAt(9);
+        //TTscores = sortstuff(TTscores , "ancient city");
+       // TTscores.RemoveAt(9);
     }
 }

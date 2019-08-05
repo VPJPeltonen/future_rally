@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 
 public class RaceOrderKeeper : MonoBehaviour
 {
     //ui
-    public Text RaceOrderText,PosNum;
+    public TextMeshProUGUI RaceOrderText,PosNum;
     private int racerAmount;
     public int pos;
     private string playername;
