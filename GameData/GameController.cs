@@ -11,16 +11,21 @@ public class GameController : MonoBehaviour
     private static string mode = "normal";
     private static string difficulty = "normal";
     private static string playerName = "PLAYER";
+    private static string map;
 
     public static string Difficulty { get => difficulty; set => difficulty = value; }
     public static string PlayerName { get => playerName; set => playerName = value; }
     public static string Mode { get => mode; set => mode = value; }
+    public static string Map { get => map; set => map = value; }
 
     public void setSolo() => mode = "solo";
     public void setNormalMode() => mode = "normal";
     public void setEasyDif() => difficulty = "easy";
     public void setNormalDif() => difficulty = "normal";
     public void setHardDif() => difficulty = "hard";
+    public void setMapDeepDesert() => map = "Deep Desert";
+    public void setMapAncientCity() => map = "Ancient City";
+    public void setMapGreatCliff() => map = "Great Cliff";
     public void setName(string arg0) => playerName = arg0;
     public static void setName2(string arg0) => playerName = arg0;
     public static string getName() => playerName;
@@ -43,7 +48,7 @@ public class GameController : MonoBehaviour
     }
     public void LoadGame()
     { 
-        if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
+        /* if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/gamesave.save", FileMode.Open);
@@ -56,7 +61,7 @@ public class GameController : MonoBehaviour
         else
         {
             Debug.Log("No game saved!");
-        }
+        }*/
     }
     
 

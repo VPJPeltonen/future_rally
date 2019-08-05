@@ -7,11 +7,13 @@ public struct RacerScore
 {
     public float time;
     public string racerName;  
-    
-    public RacerScore(string p1, float  p2)
+    public string track;
+
+    public RacerScore(string Name, float Time, string Track)
     {
-        racerName = p1;
-        time = p2;       
+        racerName = Name;
+        time = Time;       
+        track = Track;
     }
 
 }

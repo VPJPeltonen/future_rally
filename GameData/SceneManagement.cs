@@ -7,9 +7,22 @@ public class SceneManagement : MonoBehaviour
 {
     public GameObject loadingScreen;
 
-    public void SceneLoad(int scene){
-        loadingScreen.gameObject.SetActive(true);
-        SceneManager.LoadScene(scene);
+    public void SceneLoad(){
+        Debug.Log(GameController.Map);
+        switch(GameController.Map){
+            case "Ancient City":
+                loadingScreen.gameObject.SetActive(true);
+                SceneManager.LoadScene(1);
+                break;
+            case "Deep Desert":
+                loadingScreen.gameObject.SetActive(true);
+                SceneManager.LoadScene(2);
+                break;
+            default:
+                loadingScreen.gameObject.SetActive(true);
+                SceneManager.LoadScene(1);
+                break;
+        }
     }
 
     public void QuitGame() => Application.Quit();
