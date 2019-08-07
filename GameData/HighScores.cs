@@ -19,7 +19,7 @@ public class HighScores : MonoBehaviour
         new RacerScore("Turbo",265f,"ancient city"),
         new RacerScore("Momo",280f,"ancient city"),
         
-        new RacerScore("Ras2putin",195f,"deep desert"),
+        new RacerScore("Rasputin",195f,"deep desert"),
         new RacerScore("Steve Noname",210f,"deep desert"),
         new RacerScore("Turbo",225f,"deep desert"),
         new RacerScore("Max Speed",240f,"deep desert"),
@@ -30,16 +30,16 @@ public class HighScores : MonoBehaviour
         new RacerScore("Turbo",315f,"deep desert"),
         new RacerScore("Momo",330f,"deep desert"),
 
-        new RacerScore("Rasput3in",135f,"great cliff"),
-        new RacerScore("Steve Noname",150f,"great cliff"),
-        new RacerScore("Turbo",165f,"great cliff"),
-        new RacerScore("Max Speed",180f,"great cliff"),
-        new RacerScore("Momo",195f,"great cliff"),
-        new RacerScore("Rasputin",210f,"great cliff"),
-        new RacerScore("Bob",225f,"great cliff"),
-        new RacerScore("Totally Not A Dog",240f,"great cliff"),
-        new RacerScore("Turbo",265f,"great cliff"),
-        new RacerScore("Momo",280f,"great cliff")        
+        new RacerScore("Rasputin",225f,"great cliff"),
+        new RacerScore("Steve Noname",240f,"great cliff"),
+        new RacerScore("Turbo",255f,"great cliff"),
+        new RacerScore("Max Speed",270f,"great cliff"),
+        new RacerScore("Momo",285f,"great cliff"),
+        new RacerScore("Rasputin",300f,"great cliff"),
+        new RacerScore("Bob",315f,"great cliff"),
+        new RacerScore("Totally Not A Dog",330f,"great cliff"),
+        new RacerScore("Turbo",345f,"great cliff"),
+        new RacerScore("Momo",360f,"great cliff")        
     };
     public static List<RacerScore> LTscores =  new List<RacerScore>(){
         new RacerScore("Rasputin",45f,"ancient city"),
@@ -53,7 +53,7 @@ public class HighScores : MonoBehaviour
         new RacerScore("Turbo",85f,"ancient city"),
         new RacerScore("Momo",90f,"ancient city"),
 
-        new RacerScore("Raspu2tin",65f,"deep desert"),
+        new RacerScore("Rasputin",65f,"deep desert"),
         new RacerScore("Steve Noname",70f,"deep desert"),
         new RacerScore("Turbo",75f,"deep desert"),
         new RacerScore("Rasputin",80f,"deep desert"),
@@ -64,16 +64,16 @@ public class HighScores : MonoBehaviour
         new RacerScore("Turbo",105f,"deep desert"),
         new RacerScore("Momo",110f,"deep desert"),        
 
-        new RacerScore("Rasp3utin",45f,"great cliff"),
-        new RacerScore("Steve Noname",50f,"great cliff"),
-        new RacerScore("Turbo",55f,"great cliff"),
-        new RacerScore("Rasputin",70f,"great cliff"),
-        new RacerScore("Max Speed",60f,"great cliff"),
-        new RacerScore("Momo",65f,"great cliff"),
-        new RacerScore("Bob",75f,"great cliff"),
-        new RacerScore("Totally Not A Dog",80f,"great cliff"),
+        new RacerScore("Rasputin",75f,"great cliff"),
+        new RacerScore("Steve Noname",80f,"great cliff"),
         new RacerScore("Turbo",85f,"great cliff"),
-        new RacerScore("Momo",90f,"great cliff")            
+        new RacerScore("Rasputin",90f,"great cliff"),
+        new RacerScore("Max Speed",95f,"great cliff"),
+        new RacerScore("Momo",100f,"great cliff"),
+        new RacerScore("Bob",105f,"great cliff"),
+        new RacerScore("Totally Not A Dog",110f,"great cliff"),
+        new RacerScore("Turbo",115f,"great cliff"),
+        new RacerScore("Momo",120f,"great cliff")            
     };
 
     public static string getTopNames(string nameSelect, string trackSelect){

@@ -84,7 +84,7 @@ public class Hover : MonoBehaviour
         if (Physics.Raycast(ray, out hit, hoverHeight))
         {
             float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
-            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
+            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce * 1.35f;
             shipRigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
         }
     }

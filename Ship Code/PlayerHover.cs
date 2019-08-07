@@ -127,7 +127,7 @@ public class PlayerHover : Hover
     private void calculateSpeed(){
         moveSpeed = (transform.position - lastPosition).magnitude;
         lastPosition = transform.position;
-        speedText.text = (Mathf.Round(moveSpeed*100)).ToString()+" km/h";
+        speedText.text = (Mathf.Round(moveSpeed*100)).ToString();
     }
 
     private void turboBooster(){

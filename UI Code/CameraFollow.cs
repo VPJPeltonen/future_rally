@@ -6,7 +6,7 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform target;
     public AudioSource music;
-    public Vector3 defaultDistance = new Vector3(0f,0.8f,-1f);
+    private Vector3 defaultDistance = new Vector3(0f,0.6f,-2f);
     private float powerInput,turnInput;
     public float distanceDamp = 0.1f;
     public float rotationalDamp = 0.05f;
