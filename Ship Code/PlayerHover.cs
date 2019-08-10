@@ -18,6 +18,7 @@ public class PlayerHover : Hover
     private bool turboInput,playing;
     private float turboPower = 40f;
     private int collissionImmunity = 0;
+    private bool godmode = false;
     private void Start(){
         findTimer();
         findNodes();
@@ -31,7 +32,7 @@ public class PlayerHover : Hover
         if(engineOn){
             hitScreen.gameObject.SetActive(false);     
             if(controlsActive){
-                getInput();
+                if(!godmode){getInput();}
                 gearBox();
                 turboBooster();
             }
@@ -188,6 +189,6 @@ public class PlayerHover : Hover
     public void startRace() => controlsActive = true;
 
     public void godMode(bool status){
-        controlsActive = status;
+        godmode = status;
     }
 }

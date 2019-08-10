@@ -21,6 +21,7 @@ public class UImanager : MonoBehaviour
         }
     }
     public void Continue(){
+        Debug.Log("beeb");
         Time.timeScale = 1;
         pausemenu.gameObject.SetActive(false);            
     }

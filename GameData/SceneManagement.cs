@@ -5,24 +5,33 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagement : MonoBehaviour
 {
-    public GameObject loadingScreen;
+    public GameObject loadingScreen,ancientLS,deepLS,greatLS;
 
     public void SceneLoad(){
         Debug.Log(GameController.Map);
         switch(GameController.Map){
             case "Ancient City":
-                loadingScreen.gameObject.SetActive(true);
+                ancientLS.gameObject.SetActive(true);
                 SceneManager.LoadScene(1);
                 break;
             case "Deep Desert":
-                loadingScreen.gameObject.SetActive(true);
+                deepLS.gameObject.SetActive(true);
                 SceneManager.LoadScene(2);
                 break;
+            case "Great Cliff":
+                greatLS.gameObject.SetActive(true);
+                SceneManager.LoadScene(3);
+                break;                
             default:
                 loadingScreen.gameObject.SetActive(true);
                 SceneManager.LoadScene(1);
                 break;
         }
+    }
+
+    public void MainMenu() {
+        loadingScreen.gameObject.SetActive(true);
+        SceneManager.LoadScene(0);
     }
 
     public void QuitGame() => Application.Quit();

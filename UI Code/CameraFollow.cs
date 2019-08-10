@@ -36,7 +36,12 @@ public class CameraFollow : MonoBehaviour
     public GameObject UI;
     void Start(){
         cameraBody = GetComponent <Rigidbody>();
+        //toggle music based on setting
+        bool musicPlay = GameController.getMusicSetting();
+        Debug.Log(musicPlay);
+        music.enabled = musicPlay;
     }
+
     void Update(){
         bool BButton = Input.GetKeyDown(KeyCode.B);
         bool NButton = Input.GetKeyDown(KeyCode.N);
