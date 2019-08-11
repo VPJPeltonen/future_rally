@@ -14,17 +14,20 @@ public class UImanager : MonoBehaviour
                 pausemenu.gameObject.SetActive(true);
                 Cursor.visible = true;
            }else{
-                Time.timeScale = 1;
-                pausemenu.gameObject.SetActive(false);
-                Cursor.visible = false;
+                closeMenu();
            }
         }
     }
-    public void Continue(){
-        Debug.Log("beeb");
+
+    private void closeMenu(){
         Time.timeScale = 1;
-        pausemenu.gameObject.SetActive(false);            
+        pausemenu.gameObject.SetActive(false);
+        Cursor.visible = false;
     }
 
+    public void Continue() => closeMenu();
+
     public void Quit() => Application.Quit();
+
+
 }

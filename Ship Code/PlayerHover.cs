@@ -34,7 +34,7 @@ public class PlayerHover : Hover
             if(controlsActive){
                 if(!godmode){getInput();}
                 gearBox();
-                turboBooster();
+                if(Time.timeScale == 1){turboBooster();}
             }
         }else{
             hitScreen.gameObject.SetActive(true);
