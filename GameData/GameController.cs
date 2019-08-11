@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
     private static string difficulty = "normal";
     private static string playerName = "PLAYER";
     private static bool musicSetting = true;
-    private static string map;
+    private static string map = "Ancient City";
 
     public static string Difficulty { get => difficulty; set => difficulty = value; }
     public static string PlayerName { get => playerName; set => playerName = value; }
@@ -30,9 +30,12 @@ public class GameController : MonoBehaviour
     public void setName(string arg0) => playerName = arg0;
     public static void setName2(string arg0) => playerName = arg0;
     public static void setMusic(bool on) => musicSetting = on;
-    public static string getName() => playerName;
 
+    public static string getName() => playerName;
     public static bool getMusicSetting() => musicSetting;
+    public static string getMap() => map;
+    public static string getDifficulty() => difficulty;
+    public static string getMode() => mode;
 
     private Save CreateSaveGameObject()
     {

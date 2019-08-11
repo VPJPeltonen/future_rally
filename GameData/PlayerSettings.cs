@@ -7,7 +7,7 @@ public class PlayerSettings : MonoBehaviour
 {
     [SerializeField]
     private Text playername, placeholder;
-    public Toggle musicOn, musicOff;
+    public Toggle musicOn;
 
     public void Awake ()
     {
@@ -60,7 +60,6 @@ public class PlayerSettings : MonoBehaviour
         }
         else
         {
-            Debug.Log("asdsa");
             PlayerPrefs.SetInt("music", 1);
             PlayerPrefs.Save();
         }        
