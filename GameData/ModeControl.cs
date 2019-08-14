@@ -14,6 +14,7 @@ public class ModeControl : MonoBehaviour
     }
 
     private void disable(){
+        Debug.Log(GameController.Mode);
         if(GameController.Mode == "solo"){
             AIships.SetActive(false);
             position.SetActive(false);

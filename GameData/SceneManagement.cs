@@ -12,19 +12,19 @@ public class SceneManagement : MonoBehaviour
         switch(GameController.Map){
             case "Ancient City":
                 ancientLS.gameObject.SetActive(true);
-                SceneManager.LoadScene(1);
+                SceneManager.LoadSceneAsync(1);
                 break;
             case "Deep Desert":
                 deepLS.gameObject.SetActive(true);
-                SceneManager.LoadScene(2);
+                SceneManager.LoadSceneAsync(2);
                 break;
             case "Great Cliff":
                 greatLS.gameObject.SetActive(true);
-                SceneManager.LoadScene(3);
+                SceneManager.LoadSceneAsync(3);
                 break;                
             default:
                 loadingScreen.gameObject.SetActive(true);
-                SceneManager.LoadScene(1);
+                SceneManager.LoadSceneAsync(1);
                 break;
         }
     }

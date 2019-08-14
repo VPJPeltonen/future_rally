@@ -17,6 +17,7 @@ public class AIHover : Hover
     private float sensorX = 0.45f;
     private bool avoiding;
     private bool accelerating;
+    private bool breaking;
 
     //draws sensors to help see how far they reach
     void OnDrawGizmos(){
@@ -83,6 +84,10 @@ public class AIHover : Hover
                 shiftgear("down");
             }
         }
+        if(breaking){
+            var thrust = getThrust();
+            shipRigidbody.AddRelativeForce(0f, 0f, -thrust);            
+        }
     }
 
     private void CheckSensors(){
@@ -93,6 +98,7 @@ public class AIHover : Hover
         
         avoiding = false;
         accelerating = true;
+        breaking = false;
         float avoidNum = 0f;
         RaycastHit hit;
         //center sensor
@@ -102,6 +108,7 @@ public class AIHover : Hover
             avoiding = true;
             avoidNum -= 0.4f;
             accelerating = false;
+            breaking = true;
         }
 
         Vector3 rightDir = transform.right;

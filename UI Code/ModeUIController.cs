@@ -17,7 +17,6 @@ public class ModeUIController : MonoBehaviour
 
     private void checkMode(){
         string mode = GameController.getMode();
-        Debug.Log(mode);
         if(mode == "normal"){
             normalMode.isOn = true;
             soloMode.isOn = false;
@@ -28,18 +27,22 @@ public class ModeUIController : MonoBehaviour
     }
     private void checkDifficulty(){
         string dif = GameController.getDifficulty();
-        easyDif.isOn = false;
-        normalDif.isOn = false;
-        hardDif.isOn = false;
+        Debug.Log(dif);
         switch(dif){
             case "easy":
                 easyDif.isOn = true;
+                normalDif.isOn = false;
+                hardDif.isOn = false;
                 break;
             case "normal":
                 normalDif.isOn = true;
+                easyDif.isOn = false;
+                hardDif.isOn = false;
                 break;
             case "hard":
                 hardDif.isOn = true;
+                easyDif.isOn = false;
+                normalDif.isOn = false;                
                 break;
             default:
                 break;

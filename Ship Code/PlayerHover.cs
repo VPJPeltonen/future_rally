@@ -7,7 +7,6 @@ using TMPro;
 public class PlayerHover : Hover
 {
     //uistuff
-    public GameObject hitScreen;
     public TextMeshProUGUI lapCounter,gearText,speedText;
     public Slider engineSlider, turboSlider;   
     public CameraFollow camera;
@@ -29,15 +28,13 @@ public class PlayerHover : Hover
 
     void Update () 
     {
-        if(engineOn){
-            hitScreen.gameObject.SetActive(false);     
+        if(engineOn){   
             if(controlsActive){
                 if(!godmode){getInput();}
                 gearBox();
                 if(Time.timeScale == 1){turboBooster();}
             }
         }else{
-            hitScreen.gameObject.SetActive(true);
             collissionTimer++;
             accel = 0;
             currentGear = 1;
@@ -176,6 +173,7 @@ public class PlayerHover : Hover
             collissionImmunity = 240;
             engineOn = false;
             camera.playerStatusUpdate("crashed");
+            camera.DistortOn = true;
         }
     }
 

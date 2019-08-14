@@ -6,6 +6,11 @@ public class UImanager : MonoBehaviour
 {
     public GameObject pausemenu;
 
+    private void Awake() {
+        //for some reason timescale of map is set to 0 if you restart the map from menu
+        Time.timeScale = 1;
+    }
+
     void Update()
     {
         if(Input.GetKeyUp("escape") ){
@@ -13,8 +18,10 @@ public class UImanager : MonoBehaviour
                 Time.timeScale = 0;
                 pausemenu.gameObject.SetActive(true);
                 Cursor.visible = true;
+                Debug.Log("closed");
            }else{
                 closeMenu();
+                Debug.Log("open");
            }
         }
     }

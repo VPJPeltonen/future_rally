@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour
     public float rotationalDamp = 0.05f;
     private string state;
     private int counter = 0;
+    private bool distortOn = false;
     Transform camT;
     public Vector3 velocity = Vector3.one;
 
@@ -34,6 +35,10 @@ public class CameraFollow : MonoBehaviour
     Rigidbody cameraBody;
     public PlayerHover player;
     public GameObject UI;
+    public Material material;
+
+    public bool DistortOn { get => distortOn; set => distortOn = value; }
+
     void Start(){
         cameraBody = GetComponent <Rigidbody>();
         //toggle music based on setting
@@ -69,7 +74,8 @@ public class CameraFollow : MonoBehaviour
             case "starting":
                 SmoothFollow(30f,false);
                 counter++;
-                if (counter >= 100){
+                if (counter >= 150){
+                    distortOn = false;
                     state = "normal";
                     counter = 0;
                 }
@@ -82,7 +88,14 @@ public class CameraFollow : MonoBehaviour
                 break;
         }
     }
-    
+
+    private void OnRenderImage(RenderTexture src, RenderTexture dest) {
+        if (DistortOn){
+            Graphics.Blit(src,dest,material);
+        }else{
+            Graphics.Blit(src,dest);
+        }
+    }   
     void SmoothFollow(float max, bool roll){
         Vector3 toPos = target.position + (target.rotation * defaultDistance);
         Vector3 curPos = Vector3.SmoothDamp(camT.position, toPos, ref velocity, distanceDamp, max);

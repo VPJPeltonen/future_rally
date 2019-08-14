@@ -18,7 +18,7 @@ public class Hover : MonoBehaviour
     //turning speed
     public float turnSpeed = 0.25f;
     //tilt speed of the ship
-    public float tiltSpeed = 0.25f;
+    public float tiltSpeed = 0.5f;
     //force to push the ship off the ground
     public float hoverForce = 50f;
     //height the hover tries to keep
@@ -78,7 +78,9 @@ public class Hover : MonoBehaviour
     //hovering code
     protected void HoverShip(){
         //try to find ground
-        Ray ray = new Ray (transform.position, -transform.up);
+        //Ray ray = new Ray (transform.position, -transform.up);
+        Vector3 vektori = new Vector3(0,-1,0);
+        Ray ray = new Ray (transform.position, vektori);
         RaycastHit hit;
         //if found ground push against it
         if (Physics.Raycast(ray, out hit, hoverHeight))
