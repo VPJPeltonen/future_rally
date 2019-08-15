@@ -163,17 +163,19 @@ public class PlayerHover : Hover
     }
     //disable ship if hit stuff
     private void OnCollisionEnter(Collision collision){
-        float noise = Random.Range(-1f, 1f);
-        if(noise > 0){
-            crash.Play(0);
-        }else{
-            crash2.Play(0);
-        }
-        if(collissionImmunity < 1){
-            collissionImmunity = 240;
-            engineOn = false;
-            camera.playerStatusUpdate("crashed");
-            camera.DistortOn = true;
+        if(collision.relativeVelocity.magnitude > shipToughness){
+            float noise = Random.Range(-1f, 1f);
+            if(noise > 0){
+                crash.Play(0);
+            }else{
+                crash2.Play(0);
+            }
+            if(collissionImmunity < 1){
+                collissionImmunity = 240;
+                engineOn = false;
+                camera.playerStatusUpdate("crashed");
+                camera.DistortOn = true;
+            }
         }
     }
 

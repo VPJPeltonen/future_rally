@@ -10,7 +10,8 @@ public class Hover : MonoBehaviour
     //protected Transform Checkpoints;
     protected Timer timer;
     protected int currentNode = 0;
-    [Header("Enginestuff")]
+
+    [Header("Engines Properties")]
     //engine effect
     public ParticleSystem thruster1, thruster2, turbo1,turbo2;
     //forward speed
@@ -27,23 +28,31 @@ public class Hover : MonoBehaviour
     public float stabilizerPower = 0.005f;
     //acceleration
     public float accelerationRate = 0.0025f;
+    protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 2.95f };
+    protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.4f, 0.2f };
+    protected int shipToughness = 25;
+
     //is engine on
+    [Header("Engine Controls")]
     protected bool engineOn = true;
     protected bool controlsActive = false;
-    //timer for how long engine is off after collission 
-    protected int collissionTimer = 0;
     protected float powerInput,turnInput,xRotation,zRotation;
-    protected Rigidbody shipRigidbody;
-    protected Quaternion stableRotation;
     protected float accel = 0f;
     protected float reverseAccel = 0f;
+    //timer for how long engine is off after collission 
+    protected int collissionTimer = 0;
+    //ship resistance to collission
+    
+    protected Rigidbody shipRigidbody;
+    protected Quaternion stableRotation;
+
+    [Header("Stats")]
     protected int currentLaP = 0;
     protected int currentCP = 0;
     protected int currentSector = 0;
     protected int currentGear = 1;
     protected int maxGear = 5;
-    protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 2.95f };
-    protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.4f, 0.2f };
+
 
     [Header("Audio stuff")]
     public AudioSource engineSound, thrusterSound, turboSound, crash, crash2;

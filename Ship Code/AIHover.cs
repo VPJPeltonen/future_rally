@@ -176,7 +176,7 @@ public class AIHover : Hover
     }
 
     public void setDifficulty(string difficulty){
-        Debug.Log(difficulty);
+        //Debug.Log(difficulty);
         switch(difficulty){
             case "easy":
                 speed = 40f;
@@ -191,7 +191,9 @@ public class AIHover : Hover
     }
     //disable ship if hit stuff
     private void OnCollisionEnter(Collision collision){
-        engineOn = false;
-        crash.Play(0);
+        if(collision.relativeVelocity.magnitude > shipToughness){
+            engineOn = false;
+            crash.Play(0);
+        }
     }
 }
