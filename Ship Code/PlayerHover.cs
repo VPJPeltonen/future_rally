@@ -7,7 +7,7 @@ using TMPro;
 public class PlayerHover : Hover
 {
     //uistuff
-    public TextMeshProUGUI lapCounter,gearText,speedText;
+    public TextMeshProUGUI lapCounter,gearText,speedText,debugText;
     public Slider engineSlider, turboSlider;   
     public CameraFollow camera;
     //turbostuff
@@ -18,16 +18,25 @@ public class PlayerHover : Hover
     private float turboPower = 40f;
     private int collissionImmunity = 0;
     private bool godmode = false;
+    private bool debugMode = true;
+    //effect things
+    public GameObject draftEffects;
     private void Start(){
         findTimer();
         findNodes();
         findTrack();
         lapCounter.text = "1/3";
         gearText.text = "1";
+        baseDrag = 0.7f;
     }
 
     void Update () 
-    {
+    {     
+        CheckWaypointDistance();
+        engineNoise();
+        if(debugMode){
+            debugText.text = dragState + " " + shipRigidbody.drag;
+        }
         if(engineOn){   
             if(controlsActive){
                 if(!godmode){getInput();}
@@ -45,13 +54,18 @@ public class PlayerHover : Hover
             }
         }
         engineSlider.value = accel;
+        if(IsDrafting){
+            draftEffects.gameObject.SetActive(true);
+        }else{
+            draftEffects.gameObject.SetActive(false);
+        }
     }
 
     void FixedUpdate()
     {
         calculateSpeed();
-        CheckWaypointDistance();
-        engineNoise();
+        CheckDraft();
+        setDrag();
         if (collissionImmunity > 0){
             collissionImmunity--;
         }
@@ -163,7 +177,7 @@ public class PlayerHover : Hover
     }
     //disable ship if hit stuff
     private void OnCollisionEnter(Collision collision){
-        if(collision.relativeVelocity.magnitude > shipToughness){
+        if(collision.relativeVelocity.magnitude > shipToughness && collision.gameObject.tag != "AIship" && collision.gameObject.tag != "LightObject"){
             float noise = Random.Range(-1f, 1f);
             if(noise > 0){
                 crash.Play(0);

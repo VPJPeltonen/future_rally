@@ -6,13 +6,12 @@ public class HighDragzone : MonoBehaviour
 {
     public bool exit;
     void OnTriggerEnter(Collider other){
-        var ship = other.gameObject.GetComponent<Rigidbody>();
-        var isAI = other.gameObject.GetComponent<AIHover>();
-        if (ship != null && isAI != null){
+        var AI = other.gameObject.GetComponent<AIHover>();
+        if (AI != null){
             if(exit){
-                ship.drag = 1.25f;
+                AI.isDragZone = false;
             }else{
-                ship.drag = 2f;
+                AI.isDragZone = true;
             }
         }
     }   

@@ -84,7 +84,7 @@ public class CameraFollow : MonoBehaviour
                 godMode();
                 break;
             default:
-                SmoothFollow(1000f,true);
+                SmoothFollow(1000f,false);
                 break;
         }
     }

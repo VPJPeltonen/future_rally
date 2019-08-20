@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AIHover : Hover
 {
-    
+    //private float baseDrag = 1.25f;
     public float maxSteer = 45f;
     public bool testing;
 
@@ -27,6 +27,7 @@ public class AIHover : Hover
 
     void Update () 
     {      
+        engineNoise();
         if(engineOn){
             powerInput = 1;
         }else{
@@ -41,7 +42,8 @@ public class AIHover : Hover
 
     void FixedUpdate()
     {
-        engineNoise();
+        CheckDraft();
+        setDrag();
         if(engineOn){
             HoverShip();
             if(controlsActive){
@@ -104,7 +106,7 @@ public class AIHover : Hover
         //center sensor
         if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && shouldAvoid(hit))
         {
-            Debug.DrawLine(sensorStartPos, hit.point);
+            //Debug.DrawLine(sensorStartPos, hit.point, Color.red);
             avoiding = true;
             avoidNum -= 0.4f;
             accelerating = false;
@@ -116,7 +118,7 @@ public class AIHover : Hover
         sensorStartPos += sidesensorPos * rightDir;
         if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && shouldAvoid(hit))
         {
-            Debug.DrawLine(sensorStartPos, hit.point);
+            //Debug.DrawLine(sensorStartPos, hit.point);
             avoiding = true;
             avoidNum -= 1f;
             accelerating = false;
@@ -125,7 +127,7 @@ public class AIHover : Hover
         //right angle sensor
         if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(sensorAngle, transform.up) * transform.forward, out hit, sensorLength) && shouldAvoid(hit))
         {
-            Debug.DrawLine(sensorStartPos, hit.point);
+            //Debug.DrawLine(sensorStartPos, hit.point);
             avoiding = true;
             avoidNum -= 0.5f;
         }
@@ -134,7 +136,7 @@ public class AIHover : Hover
         sensorStartPos += 2 * sidesensorPos * -rightDir;
         if (Physics.Raycast(sensorStartPos, transform.forward, out hit, sensorLength) && shouldAvoid(hit))
         {
-            Debug.DrawLine(sensorStartPos, hit.point);
+            //Debug.DrawLine(sensorStartPos, hit.point);
             avoiding = true;
             avoidNum += 1f;
             accelerating = false;
@@ -143,7 +145,7 @@ public class AIHover : Hover
         //left angle sensor
         if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-sensorAngle, transform.up) * transform.forward, out hit, sensorLength) && shouldAvoid(hit))
         {
-            Debug.DrawLine(sensorStartPos, hit.point);
+            //Debug.DrawLine(sensorStartPos, hit.point);
             avoiding = true;
             avoidNum += 0.5f;
         }
@@ -179,13 +181,13 @@ public class AIHover : Hover
         //Debug.Log(difficulty);
         switch(difficulty){
             case "easy":
-                speed = 40f;
+                speed -= 18f;
                 break;
             case "normal":
-                speed = 50f;
+                //speed += 5f;
                 break;   
             case "hard":
-                speed = 60f;
+                speed += 15f;
                 break;            
         }
     }

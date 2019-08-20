@@ -19,13 +19,13 @@ public class Hover : MonoBehaviour
     //turning speed
     public float turnSpeed = 0.25f;
     //tilt speed of the ship
-    public float tiltSpeed = 0.5f;
+    protected float tiltSpeed = 0.2f;
     //force to push the ship off the ground
     public float hoverForce = 50f;
     //height the hover tries to keep
-    public float hoverHeight = 5f;
+    protected float hoverHeight = 5f;
     //power to keep ship up right
-    public float stabilizerPower = 0.005f;
+    protected float stabilizerPower = 0.003f;
     //acceleration
     public float accelerationRate = 0.0025f;
     protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 2.95f };
@@ -67,12 +67,25 @@ public class Hover : MonoBehaviour
     public string racerName = "Steve Noname";
     protected float moveSpeed;
     protected Vector3 lastPosition;
+
+    [Header("Drafting Stuff")]
+    protected float baseDrag = 1.25f;
+    protected float draftRange = 80f;
+    protected float draftRayX = 1f;//forward position
+    protected float draftRayY = 0.01f;//ray height
+    protected float draftRayAngle = 2f;
+    private bool isDrafting = false;
+    public bool isDragZone = false;
+    protected string dragState = "normal";
+
+    public bool IsDrafting { get => isDrafting; set => isDrafting = value; }
+
     private void Start(){
         findTimer();
         findNodes();
         findTrack();
     }
-    
+
     protected void Awake () 
     {
         lastPosition = transform.position; 
@@ -126,16 +139,25 @@ public class Hover : MonoBehaviour
 
     public void endRace() => controlsActive = false;
 
+    public void checkPoint(int CPnum){
+        //check if last checkpoint has been passed 
+        if (CPnum == currentCP+1){
+            
+            currentCP = CPnum;
+            Debug.Log(currentCP);
+        }
+    }
+
     public float getPosition(){
         Transform target;
         if(currentCP==3){
-            target = checkPointList[0];
+            target = checkPointList[1];
         }else{
             target = checkPointList[(currentCP+2)*3];//the weird number is because the list of checkpoints has some unnecessary items
         }
         float distance = Vector3.Distance(target.position, transform.position); 
         float lapPenalty = (3-currentLaP)*20000;
-        float checkpointPenalty = (5-currentCP)*2000;
+        float checkpointPenalty = (5-currentCP)*5000;
         distance = distance + lapPenalty + checkpointPenalty;
         return distance;
     }
@@ -155,6 +177,7 @@ public class Hover : MonoBehaviour
     protected void findTrack(){
         GameObject trackholder = GameObject.FindWithTag("Track"); 
         checkPointList = trackholder.GetComponentsInChildren<Transform>(); 
+        Debug.Log(checkPointList.Length);
     }
 
 
@@ -193,10 +216,95 @@ public class Hover : MonoBehaviour
         em.enabled = select;
     }
 
-    public void checkPoint(int CPnum){
-        //check if last checkpoint has been passed 
-        if (CPnum == currentCP+1){
-            currentCP = CPnum;
+    protected void CheckDraft(){
+        //float draftPower = 0.25f;
+        IsDrafting = false;
+        RaycastHit hit; 
+        for(int i = 0; i < 4; i++ ){
+            Vector3 sensorStartPos = transform.position;
+            sensorStartPos.y += draftRayY;
+            Vector3 forwardDir = transform.forward;
+            Vector3 rightDir = transform.right;
+            sensorStartPos += forwardDir * draftRayX;            
+            sensorStartPos.y += draftRayY-0.3f+0.3f*i;
+            //center sensor
+            if (Physics.Raycast(sensorStartPos, transform.forward, out hit, draftRange)  && isShip(hit))
+            {
+                Debug.DrawLine(sensorStartPos, hit.point, Color.red);
+                IsDrafting = true; 
+            }     
+            //right sensor
+            sensorStartPos += 0.3f * rightDir;
+            if (Physics.Raycast(sensorStartPos, transform.forward, out hit, draftRange) && isShip(hit))
+            {
+                Debug.DrawLine(sensorStartPos, hit.point, Color.red);
+                IsDrafting = true; 
+            }
+            //right angle sensor
+            if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(draftRayAngle, transform.up) * transform.forward, out hit, draftRange)  && isShip(hit))
+            {
+                Debug.DrawLine(sensorStartPos, hit.point, Color.red);
+                IsDrafting = true;
+            }
+            //left sensor
+            sensorStartPos += 0.6f * -rightDir;
+            if (Physics.Raycast(sensorStartPos, transform.forward, out hit, draftRange) && isShip(hit))
+            {
+                Debug.DrawLine(sensorStartPos, hit.point, Color.red);
+                IsDrafting = true; 
+            }   
+            //left angle sensor
+            if (Physics.Raycast(sensorStartPos, Quaternion.AngleAxis(-draftRayAngle, transform.up) * transform.forward, out hit, draftRange) && isShip(hit))
+            {
+                Debug.DrawLine(sensorStartPos, hit.point, Color.red);
+                IsDrafting = true;
+            }         
+        }    
+    }
+
+    protected bool isShip(RaycastHit hit){
+        if (hit.collider.CompareTag("PlayerShip") || hit.collider.CompareTag("AIship")){
+            return true;
+        }else{
+            return false;
         }
+    }    
+
+    protected void setDrag(){
+        //check what state should be
+        var tempState = dragState;
+        if(IsDrafting){
+            if(isDragZone){
+                dragState = "zone drafting";
+            }else{
+                dragState = "drafting";
+            }
+        }else{
+            if(isDragZone){
+                dragState = "zone";
+            }else{
+                dragState = "normal";
+            }
+        }
+        //see if state is different from old one
+        if(tempState != dragState){
+            switch(dragState){
+                case "normal":
+                    shipRigidbody.drag = baseDrag;
+                    break;
+                case "zone":
+                    shipRigidbody.drag = 2f;
+                    break;
+                case "drafting":
+                    shipRigidbody.drag = baseDrag - 0.25f;
+                    break;
+                case "zone drafting":
+                    shipRigidbody.drag = 1.75f;
+                    break;                                                            
+                default:
+                    shipRigidbody.drag = baseDrag;
+                    break;
+            }
+        }        
     }
 }
