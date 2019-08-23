@@ -3,7 +3,20 @@ guid: 42ea94d46337bb64e990b70efc63c04a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - path: {instanceID: 0}
+  - thruster1: {instanceID: 0}
+  - thruster2: {instanceID: 0}
+  - turbo1: {instanceID: 0}
+  - turbo2: {instanceID: 0}
+  - engineSound: {instanceID: 0}
+  - thrusterSound: {instanceID: 0}
+  - turboSound: {instanceID: 0}
+  - crash: {instanceID: 0}
+  - crash2: {instanceID: 0}
+  - keeper: {instanceID: 0}
+  - desertDust: {fileID: 4840641041378023473, guid: 449c09cef0578b14c98078bdb670ea43,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

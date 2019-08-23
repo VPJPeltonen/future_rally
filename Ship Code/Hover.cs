@@ -21,7 +21,7 @@ public class Hover : MonoBehaviour
     //tilt speed of the ship
     protected float tiltSpeed = 0.2f;
     //force to push the ship off the ground
-    public float hoverForce = 50f;
+    protected float hoverForce = 200f;
     //height the hover tries to keep
     protected float hoverHeight = 5f;
     //power to keep ship up right
@@ -77,6 +77,10 @@ public class Hover : MonoBehaviour
     private bool isDrafting = false;
     public bool isDragZone = false;
     protected string dragState = "normal";
+    protected int counter,draftCounter = 0;
+
+    [Header("Effects")]
+    public GameObject desertDust;
 
     public bool IsDrafting { get => isDrafting; set => isDrafting = value; }
 
@@ -84,6 +88,7 @@ public class Hover : MonoBehaviour
         findTimer();
         findNodes();
         findTrack();
+        counter = 0;
     }
 
     protected void Awake () 
@@ -93,48 +98,6 @@ public class Hover : MonoBehaviour
         //get original rotations for stabilisation
         zRotation =  transform.eulerAngles.z;
         xRotation = transform.eulerAngles.x;
-    }
-
-    
-
-    //hovering code
-    protected void HoverShip(){
-        //try to find ground
-        //Ray ray = new Ray (transform.position, -transform.up);
-        Vector3 vektori = new Vector3(0,-1,0);
-        Ray ray = new Ray (transform.position, vektori);
-        RaycastHit hit;
-        //if found ground push against it
-        if (Physics.Raycast(ray, out hit, hoverHeight))
-        {
-            float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
-            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce * 1.35f;
-            shipRigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
-        }
-    }
-
-    //acceleration and turning
-    protected void EngineControl(){
-        //forward power
-        if (powerInput>0){
-            var thrust = getThrust();
-            shipRigidbody.AddRelativeForce(0f, 0f, thrust);
-            enableThrusters(true);
-        }else{
-            enableThrusters(false);
-        }
-        
-        if (powerInput<0){
-            //reverse power
-            shipRigidbody.AddRelativeForce(0f, 0f, (powerInput * speed * reverseAccel)/2);
-        }
-        //ship turning and tilting
-        shipRigidbody.AddRelativeTorque(0f, turnInput * turnSpeed, -(turnInput * tiltSpeed));
-
-        //get the current y rotation so it wont push for it
-        stableRotation = Quaternion.Euler(xRotation, transform.eulerAngles.y, zRotation);
-        //push the ship towards stability
-        transform.rotation = Quaternion.Lerp(transform.rotation, stableRotation,  Time.time * stabilizerPower);
     }
 
     public void endRace() => controlsActive = false;
@@ -160,6 +123,54 @@ public class Hover : MonoBehaviour
         float checkpointPenalty = (5-currentCP)*5000;
         distance = distance + lapPenalty + checkpointPenalty;
         return distance;
+    }    
+
+    //hovering code
+    protected void HoverShip(){
+        //Ray ray = new Ray (transform.position, -transform.up);
+        //get world down
+        Vector3 vektori = new Vector3(0,-1,0);
+        Vector3 hoverSensor = transform.position;
+        hoverSensor.y += 0.2f;
+        //try to find ground
+        Ray ray = new Ray (hoverSensor, vektori);
+        RaycastHit hit;
+        //if found ground push against it
+        if (Physics.Raycast(ray, out hit, hoverHeight))
+        {
+
+            float proportionalHeight = ( Mathf.Sqrt(hoverHeight) -  Mathf.Sqrt(hit.distance)) / hoverHeight;         
+            if(proportionalHeight > 0){
+                //force amount
+                Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce * 1.35f;
+                //apply force
+                shipRigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
+            }
+        }
+    }
+
+    //acceleration and turning
+    protected void EngineControl(){
+        //forward power
+        if (powerInput>0){
+            var thrust = getThrust();
+            shipRigidbody.AddRelativeForce(0f, 0f, thrust);
+            enableThrusters(true);
+        }else{
+            enableThrusters(false);
+        }
+        
+        if (powerInput<0){
+            //reverse power
+            shipRigidbody.AddRelativeForce(0f, 0f, (powerInput * speed * reverseAccel)/2);
+        }
+        //ship turning and tilting
+        shipRigidbody.AddRelativeTorque(0f, turnInput * turnSpeed, -(turnInput * tiltSpeed));
+
+        //get the current y rotation so it wont push for it
+        stableRotation = Quaternion.Euler(xRotation, transform.eulerAngles.y, zRotation);
+        //push the ship towards stability
+        transform.rotation = Quaternion.Lerp(transform.rotation, stableRotation,  Time.time * stabilizerPower);
     }
     
     protected void findNodes(){
@@ -274,6 +285,7 @@ public class Hover : MonoBehaviour
         //check what state should be
         var tempState = dragState;
         if(IsDrafting){
+            draftCounter = 45;
             if(isDragZone){
                 dragState = "zone drafting";
             }else{
@@ -283,7 +295,11 @@ public class Hover : MonoBehaviour
             if(isDragZone){
                 dragState = "zone";
             }else{
-                dragState = "normal";
+                if(draftCounter >= 1){
+                    dragState = "drafting";
+                }else{
+                    dragState = "normal";
+                }
             }
         }
         //see if state is different from old one
@@ -296,15 +312,35 @@ public class Hover : MonoBehaviour
                     shipRigidbody.drag = 2f;
                     break;
                 case "drafting":
-                    shipRigidbody.drag = baseDrag - 0.25f;
+                    shipRigidbody.drag = baseDrag - 0.25f;                    
                     break;
                 case "zone drafting":
-                    shipRigidbody.drag = 1.75f;
+                    shipRigidbody.drag = 1.75f;                  
                     break;                                                            
                 default:
                     shipRigidbody.drag = baseDrag;
                     break;
             }
-        }        
+        }      
+        if(draftCounter >= 1){
+            draftCounter--;
+        }  
     }
+
+    protected void makeDust(){
+        //Ray ray = new Ray (transform.position, -transform.up);
+        //get world down
+        Vector3 vektori = new Vector3(0,-1,0);
+        Vector3 hoverSensor = transform.position;
+        hoverSensor.y += 0.2f;
+        //try to find ground
+        Ray ray = new Ray (hoverSensor, vektori);
+        RaycastHit hit;
+        //if found ground push against it
+        if (Physics.Raycast(ray, out hit))
+        {
+            Instantiate(desertDust, hit.point, Quaternion.identity);
+            Debug.Log("CREATION");
+        }
+    }    
 }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ObjectHover : MonoBehaviour
 {
-    private float hoverForce = 50f;
-    private float hoverHeight = 5f;
+    private float hoverForce = 200f;
+    private float hoverHeight = 4f;
     protected Rigidbody rigidbody;
     protected Quaternion stableRotation;
     protected float xRotation,zRotation,yRotation;
@@ -42,9 +42,13 @@ public class ObjectHover : MonoBehaviour
         //if found ground push against it
         if (Physics.Raycast(ray, out hit, hoverHeight))
         {
-            float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
-            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce * 1.35f;
-            rigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
+            float proportionalHeight = ( Mathf.Sqrt(hoverHeight) -  Mathf.Sqrt(hit.distance)) / hoverHeight;         
+            if(proportionalHeight > 0){
+                //force amount
+                Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce * 1.35f;
+                //apply force
+                rigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
+            }
         }
     }
 

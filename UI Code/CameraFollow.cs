@@ -88,6 +88,7 @@ public class CameraFollow : MonoBehaviour
                 break;
         }
     }
+    public void playerStatusUpdate(string status) => state = status;
 
     private void OnRenderImage(RenderTexture src, RenderTexture dest) {
         if (DistortOn){
@@ -96,8 +97,11 @@ public class CameraFollow : MonoBehaviour
             Graphics.Blit(src,dest);
         }
     }   
+
     void SmoothFollow(float max, bool roll){
         Vector3 toPos = target.position + (target.rotation * defaultDistance);
+        //smoothing of y movement of camera that didnt work out. Might try again
+        //toPos.y = (toPos.y + camT.position.y)/2;
         Vector3 curPos = Vector3.SmoothDamp(camT.position, toPos, ref velocity, distanceDamp, max);
         
         camT.position = curPos;
@@ -106,10 +110,7 @@ public class CameraFollow : MonoBehaviour
         }else{
             camT.LookAt(target);
         }
-        
     }
-
-    public void playerStatusUpdate(string status) => state = status;
 
     private void godMode(){
         powerInput = Input.GetAxisRaw ("Vertical");

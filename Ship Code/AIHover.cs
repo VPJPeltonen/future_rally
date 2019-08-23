@@ -42,8 +42,12 @@ public class AIHover : Hover
 
     void FixedUpdate()
     {
+        if (counter == 10){
+            counter = 0;
+            makeDust();
+        }
         CheckDraft();
-        setDrag();
+        setDrag();      
         if(engineOn){
             HoverShip();
             if(controlsActive){
@@ -53,6 +57,7 @@ public class AIHover : Hover
                 if(!avoiding){SteerShip();}
             }
         }
+        counter++;
     }
 
     //start controls 

@@ -18,7 +18,7 @@ public class PlayerHover : Hover
     private float turboPower = 40f;
     private int collissionImmunity = 0;
     private bool godmode = false;
-    private bool debugMode = true;
+    private bool debugMode = false;
     //effect things
     public GameObject draftEffects;
     private void Start(){
@@ -35,7 +35,7 @@ public class PlayerHover : Hover
         CheckWaypointDistance();
         engineNoise();
         if(debugMode){
-            debugText.text = dragState + " " + shipRigidbody.drag;
+            debugText.text = dragState + " " + shipRigidbody.drag + "\n" + draftCounter + "\n" + dragState;
         }
         if(engineOn){   
             if(controlsActive){
@@ -54,17 +54,17 @@ public class PlayerHover : Hover
             }
         }
         engineSlider.value = accel;
-        if(IsDrafting){
-            draftEffects.gameObject.SetActive(true);
-        }else{
-            draftEffects.gameObject.SetActive(false);
-        }
+        draftEffectsShow();
     }
 
     void FixedUpdate()
     {
         calculateSpeed();
-        CheckDraft();
+        if(counter == 5){
+            CheckDraft();
+            counter = 0;
+        }
+        counter++;
         setDrag();
         if (collissionImmunity > 0){
             collissionImmunity--;
@@ -75,6 +75,12 @@ public class PlayerHover : Hover
         }
     }
 
+    //start controls 
+    public void startRace() => controlsActive = true;
+
+    public void godMode(bool status){
+        godmode = status;
+    }
 
     private void CheckWaypointDistance(){
         if(Vector3.Distance(transform.position, nodes[currentNode].position) < 100f){ 
@@ -199,10 +205,12 @@ public class PlayerHover : Hover
         turboInput = Input.GetButton("Jump"); 
     }
 
-    //start controls 
-    public void startRace() => controlsActive = true;
 
-    public void godMode(bool status){
-        godmode = status;
+    private void draftEffectsShow(){
+        if(dragState == "drafting" && moveSpeed >= 1){
+            draftEffects.gameObject.SetActive(true);
+        }else{
+            draftEffects.gameObject.SetActive(false);
+        }
     }
 }
