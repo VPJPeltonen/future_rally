@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
+
 public class Hover : MonoBehaviour
 {
     public Transform path;
@@ -31,6 +33,7 @@ public class Hover : MonoBehaviour
     protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 2.95f };
     protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.4f, 0.2f };
     protected int shipToughness = 25;
+    
 
     //is engine on
     [Header("Engine Controls")]
@@ -80,7 +83,7 @@ public class Hover : MonoBehaviour
     protected int counter,draftCounter = 0;
 
     [Header("Effects")]
-    public GameObject desertDust;
+    public GameObject usedDust,desertDust,darkDesertDust,windEffects,bottomThruster;
 
     public bool IsDrafting { get => isDrafting; set => isDrafting = value; }
 
@@ -88,6 +91,7 @@ public class Hover : MonoBehaviour
         findTimer();
         findNodes();
         findTrack();
+        sceneSetUp();
         counter = 0;
     }
 
@@ -339,8 +343,29 @@ public class Hover : MonoBehaviour
         //if found ground push against it
         if (Physics.Raycast(ray, out hit))
         {
-            Instantiate(desertDust, hit.point, Quaternion.identity);
-            Debug.Log("CREATION");
+            Instantiate(usedDust, hit.point, Quaternion.identity);
         }
     }    
+
+    protected void sceneSetUp(){
+         // Create a temporary reference to the current scene.
+         Scene currentScene = SceneManager.GetActiveScene ();
+ 
+         // Retrieve the name of this scene.
+         var usedScene = currentScene.buildIndex;
+         switch(usedScene){
+            case 1://track1
+                usedDust = desertDust;
+                break;
+            case 2://desert2
+                usedDust = darkDesertDust;
+                break;
+            case 3://great cliff
+                usedDust = desertDust;
+                break;
+            default:
+                usedDust = desertDust;
+                break;
+         }
+    }
 }

@@ -25,6 +25,7 @@ public class PlayerHover : Hover
         findTimer();
         findNodes();
         findTrack();
+        sceneSetUp();
         lapCounter.text = "1/3";
         gearText.text = "1";
         baseDrag = 0.7f;
@@ -54,14 +55,18 @@ public class PlayerHover : Hover
             }
         }
         engineSlider.value = accel;
-        draftEffectsShow();
+        
     }
 
     void FixedUpdate()
     {
         calculateSpeed();
-        if(counter == 5){
-            CheckDraft();
+        if(counter%5 == 0){
+            CheckDraft();   
+            effectsShow(); 
+        }
+        if(counter == 20){
+            makeDust();
             counter = 0;
         }
         counter++;
@@ -206,7 +211,14 @@ public class PlayerHover : Hover
     }
 
 
-    private void draftEffectsShow(){
+    private void effectsShow(){
+        if(moveSpeed >= 1){
+            windEffects.gameObject.SetActive(true);
+            bottomThruster.gameObject.SetActive(false);
+        }else{
+            windEffects.gameObject.SetActive(false);
+            bottomThruster.gameObject.SetActive(true);
+        }
         if(dragState == "drafting" && moveSpeed >= 1){
             draftEffects.gameObject.SetActive(true);
         }else{

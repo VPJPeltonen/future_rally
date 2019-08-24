@@ -3,7 +3,28 @@ guid: a8321f3a398ff1a42ab64ed14e5bde97
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - path: {instanceID: 0}
+  - thruster1: {instanceID: 0}
+  - thruster2: {instanceID: 0}
+  - turbo1: {instanceID: 0}
+  - turbo2: {instanceID: 0}
+  - engineSound: {instanceID: 0}
+  - thrusterSound: {instanceID: 0}
+  - turboSound: {instanceID: 0}
+  - crash: {instanceID: 0}
+  - crash2: {instanceID: 0}
+  - keeper: {instanceID: 0}
+  - desertDust: {instanceID: 0}
+  - lapCounter: {instanceID: 0}
+  - gearText: {instanceID: 0}
+  - speedText: {instanceID: 0}
+  - debugText: {instanceID: 0}
+  - engineSlider: {instanceID: 0}
+  - turboSlider: {instanceID: 0}
+  - camera: {instanceID: 0}
+  - draftEffects: {fileID: 8195301438592432777, guid: bea17027bf2766b42aebbe66c5268ba9,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
