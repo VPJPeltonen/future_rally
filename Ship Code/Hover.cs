@@ -24,10 +24,13 @@ public class Hover : MonoBehaviour
     protected float tiltSpeed = 0.2f;
     //force to push the ship off the ground
     protected float hoverForce = 200f;
+
+    protected float hoverDamb = 1f;
     //height the hover tries to keep
     protected float hoverHeight = 5f;
     //power to keep ship up right
-    protected float stabilizerPower = 0.003f;
+    protected float stabilizerPower = 0.1f;
+    protected float angle = 0;
     //acceleration
     public float accelerationRate = 0.0025f;
     protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 2.95f };
@@ -145,10 +148,11 @@ public class Hover : MonoBehaviour
 
             float proportionalHeight = ( Mathf.Sqrt(hoverHeight) -  Mathf.Sqrt(hit.distance)) / hoverHeight;         
             if(proportionalHeight > 0){
+                float upSpeed = shipRigidbody.velocity.y;
                 //force amount
-                Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce * 1.35f;
+                float appliedHoverForce = (proportionalHeight * hoverForce * 1.35f)-(hoverDamb*upSpeed);
                 //apply force
-                shipRigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
+                shipRigidbody.AddForce(Vector3.up * appliedHoverForce, ForceMode.Acceleration);
             }
         }
     }
@@ -170,11 +174,7 @@ public class Hover : MonoBehaviour
         }
         //ship turning and tilting
         shipRigidbody.AddRelativeTorque(0f, turnInput * turnSpeed, -(turnInput * tiltSpeed));
-
-        //get the current y rotation so it wont push for it
-        stableRotation = Quaternion.Euler(xRotation, transform.eulerAngles.y, zRotation);
-        //push the ship towards stability
-        transform.rotation = Quaternion.Lerp(transform.rotation, stableRotation,  Time.time * stabilizerPower);
+        Stablizer();
     }
     
     protected void findNodes(){
@@ -367,5 +367,41 @@ public class Hover : MonoBehaviour
                 usedDust = desertDust;
                 break;
          }
+    }
+
+    protected void Stablizer(){ 
+        Vector3 forwardDir = transform.forward;
+        Vector3 vektori = new Vector3(0,-1,0);
+        Vector3 hoverSensor = transform.position + (0.2f * forwardDir);
+        RaycastHit hit;
+
+        Ray frontRay = new Ray (hoverSensor, vektori);
+        float frontDist = 0;
+        if (Physics.Raycast(frontRay, out hit)){
+            frontDist = hit.distance;
+        }
+
+        hoverSensor -= 0.4f * forwardDir; 
+        Ray backRay = new Ray (hoverSensor, vektori);
+        float backDist = 0;
+        if (Physics.Raycast(backRay, out hit)){
+            backDist = hit.distance;
+        }
+
+        //plus means forward tilt
+        if (backDist < 8 && frontDist < 8){
+            angle = (1 - (backDist/frontDist)) * 2000;//higer number mean front is closer
+        }
+        if (backDist > 10 && frontDist  > 10){
+            angle = 0;
+        }
+        angle = Mathf.Clamp(angle, -6, 6);
+        var tempX = xRotation + angle;   
+        
+        //get the current y rotation so it wont push for it
+        stableRotation = Quaternion.Euler(tempX, transform.eulerAngles.y, zRotation);
+        //push the ship towards stability
+        transform.rotation = Quaternion.Lerp(transform.rotation, stableRotation,  stabilizerPower);
+
     }
 }

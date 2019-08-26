@@ -76,7 +76,9 @@ public class PlayerHover : Hover
         }
         if(engineOn){
             HoverShip();
-            if(controlsActive){EngineControl();}
+            if(controlsActive){
+                EngineControl();
+            }
         }
     }
 
@@ -186,6 +188,7 @@ public class PlayerHover : Hover
         em = turbo2.emission;
         em.enabled = select;
     }
+    
     //disable ship if hit stuff
     private void OnCollisionEnter(Collision collision){
         if(collision.relativeVelocity.magnitude > shipToughness && collision.gameObject.tag != "AIship" && collision.gameObject.tag != "LightObject"){

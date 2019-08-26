@@ -203,4 +203,14 @@ public class AIHover : Hover
             crash.Play(0);
         }
     }
+
+    private void effectsShow(){
+        if(moveSpeed >= 1){
+            windEffects.gameObject.SetActive(true);
+            bottomThruster.gameObject.SetActive(false);
+        }else{
+            windEffects.gameObject.SetActive(false);
+            bottomThruster.gameObject.SetActive(true);
+        }
+    }
 }
