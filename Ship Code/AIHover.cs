@@ -23,6 +23,10 @@ public class AIHover : Hover
     void OnDrawGizmos(){
         shipRigidbody = GetComponent <Rigidbody>();
         CheckSensors();
+        CheckDraft();
+        sideSensors();
+        Gizmos.color = Color.yellow;
+        //Gizmos.DrawSphere(transform.position, 40);
     }
 
     void Update () 
@@ -46,7 +50,9 @@ public class AIHover : Hover
             counter = 0;
             makeDust();
         }
-        CheckDraft();
+        if(racersClose()){
+            CheckDraft();
+        }
         setDrag();      
         if(engineOn){
             HoverShip();
@@ -200,7 +206,7 @@ public class AIHover : Hover
     private void OnCollisionEnter(Collision collision){
         if(collision.relativeVelocity.magnitude > shipToughness){
             engineOn = false;
-            crash.Play(0);
+//            crash.Play(0);
         }
     }
 

@@ -66,7 +66,7 @@ public class CameraFollow : MonoBehaviour
     void FixedUpdate(){ 
         switch(state){
             case "normal":
-                SmoothFollow(1000f,true);
+                SmoothFollow(1000f,false);
                 break;
             case "crashed":
                 SmoothFollow(1f,false);
@@ -101,7 +101,7 @@ public class CameraFollow : MonoBehaviour
     void SmoothFollow(float max, bool roll){
         Vector3 toPos = target.position + (target.rotation * defaultDistance);
         //smoothing of y movement of camera that didnt work out. Might try again
-        //toPos.y = (toPos.y + camT.position.y)/2;
+        toPos.y = ((toPos.y + toPos.y + camT.position.y)/3);
         Vector3 curPos = Vector3.SmoothDamp(camT.position, toPos, ref velocity, distanceDamp, max);
         
         camT.position = curPos;

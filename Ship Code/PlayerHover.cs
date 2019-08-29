@@ -18,25 +18,36 @@ public class PlayerHover : Hover
     private float turboPower = 40f;
     private int collissionImmunity = 0;
     private bool godmode = false;
-    private bool debugMode = false;
+    private bool debugMode = true;
     //effect things
     public GameObject draftEffects;
-    private void Start(){
+
+    private void Awake(){
         findTimer();
         findNodes();
         findTrack();
+        findRacers();
         sceneSetUp();
+        lastPosition = transform.position;         
+        //get original rotations for stabilisation
+        zRotation =  transform.eulerAngles.z;
+        xRotation = transform.eulerAngles.x;
         lapCounter.text = "1/3";
         gearText.text = "1";
         baseDrag = 0.7f;
     }
 
-    void Update () 
-    {     
+    void Update (){     
         CheckWaypointDistance();
         engineNoise();
         if(debugMode){
-            debugText.text = dragState + " " + shipRigidbody.drag + "\n" + draftCounter + "\n" + dragState;
+            string debugInfo = "";
+            if(inRamRange){
+                debugInfo = "true";
+            }else{
+                debugInfo = "false";
+            }
+            debugText.text = debugInfo;
         }
         if(engineOn){   
             if(controlsActive){
@@ -55,14 +66,16 @@ public class PlayerHover : Hover
             }
         }
         engineSlider.value = accel;
-        
     }
 
     void FixedUpdate()
     {
         calculateSpeed();
+        if(racersClose()){
+            CheckDraft();
+            sideSensors();
+        }
         if(counter%5 == 0){
-            CheckDraft();   
             effectsShow(); 
         }
         if(counter == 20){
@@ -161,18 +174,19 @@ public class PlayerHover : Hover
                 shipRigidbody.AddRelativeForce(0f, 0f, turboPower);
                 currentTurbo -= 0.5f;
                 if (!playing){
-                    turboSound.Play(0);
+                    
+//                    turboSound.Play(0);
                     playing = true;
                 }
-                enableTurbo(true);                          
+                shipsEngine.enableTurbo(true);                          
             }else{
-                enableTurbo(false);       
-                turboSound.Stop();   
+                shipsEngine.enableTurbo(false);       
+   //             turboSound.Stop();   
                 playing = false;
             }
         }else{
-            enableTurbo(false);
-            turboSound.Stop();   
+            shipsEngine.enableTurbo(false);
+//            turboSound.Stop();   
             playing = false;
         }
         if (currentTurbo < maxTurbo){
@@ -181,23 +195,30 @@ public class PlayerHover : Hover
         turboSlider.value = currentTurbo;
     }
 
-    private void enableTurbo(bool select){
+  /*   private void enableTurbo(bool select){
         var em = turbo1.emission;
+
         //turboSound.Play(0);
         em.enabled = select;
         em = turbo2.emission;
         em.enabled = select;
     }
-    
+*/
     //disable ship if hit stuff
     private void OnCollisionEnter(Collision collision){
+        //aSource.PlayOneShot(crashSound1, 0.7F);
+        //Debug.Log(collision.relativeVelocity.magnitude);
+        float noise = Random.Range(-1f, 1f);
+        if(noise > 0){ //&& !crash.isPlaying){
+            //crash.Play(0);
+            aSource.PlayOneShot(crashSound1, 1F);
+        }else{
+            aSource.PlayOneShot(crashSound2, 1F);
+            //crash2.Play(0);
+            //if(!crash2.isPlaying){crash2.Play(0);}
+        }
+        
         if(collision.relativeVelocity.magnitude > shipToughness && collision.gameObject.tag != "AIship" && collision.gameObject.tag != "LightObject"){
-            float noise = Random.Range(-1f, 1f);
-            if(noise > 0){
-                crash.Play(0);
-            }else{
-                crash2.Play(0);
-            }
             if(collissionImmunity < 1){
                 collissionImmunity = 240;
                 engineOn = false;
@@ -228,4 +249,6 @@ public class PlayerHover : Hover
             draftEffects.gameObject.SetActive(false);
         }
     }
+
+
 }

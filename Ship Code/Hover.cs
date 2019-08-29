@@ -12,6 +12,8 @@ public class Hover : MonoBehaviour
     //protected Transform Checkpoints;
     protected Timer timer;
     protected int currentNode = 0;
+    protected List<Transform> racerList = new List<Transform>();
+    protected Dictionary<Transform,float> racerDistances =  new Dictionary<Transform, float>();
 
     [Header("Engines Properties")]
     //engine effect
@@ -61,7 +63,9 @@ public class Hover : MonoBehaviour
 
 
     [Header("Audio stuff")]
-    public AudioSource engineSound, thrusterSound, turboSound, crash, crash2;
+    protected AudioSource aSource;
+    public AudioClip crashSound1,crashSound2;//,engineSounds,turboSounds;
+    //public AudioSource crash, crash2;//engineSound, thrusterSound, turboSound, 
     private float jetPitch;
     private const float LowPitch = 0.2f;
     private const float HighPitch = 2f;
@@ -85,23 +89,30 @@ public class Hover : MonoBehaviour
     protected string dragState = "normal";
     protected int counter,draftCounter = 0;
 
+    [Header("Ram Stuff")]
+    protected bool inRamRange = false;
+    protected float RamRange = 20f;
+
     [Header("Effects")]
     public GameObject usedDust,desertDust,darkDesertDust,windEffects,bottomThruster;
+
+    public ThrusterEngine shipsEngine;
 
     public bool IsDrafting { get => isDrafting; set => isDrafting = value; }
 
     private void Start(){
-        findTimer();
-        findNodes();
-        findTrack();
-        sceneSetUp();
+        aSource = GetComponent<AudioSource>();
+        shipRigidbody = GetComponent <Rigidbody>();
         counter = 0;
     }
 
     protected void Awake () 
     {
-        lastPosition = transform.position; 
-        shipRigidbody = GetComponent <Rigidbody>();
+        findTimer();
+        findNodes();
+        findTrack();
+        sceneSetUp();
+        lastPosition = transform.position;         
         //get original rotations for stabilisation
         zRotation =  transform.eulerAngles.z;
         xRotation = transform.eulerAngles.x;
@@ -199,8 +210,7 @@ public class Hover : MonoBehaviour
     protected void engineNoise(){
         var gearmod = gearValues[currentGear-1]/2;
         float engineRevs = Mathf.Abs (accel+gearmod) * SpeedToRevs;
-        engineSound.pitch = Mathf.Clamp (engineRevs, LowPitch+gearmod, HighPitch+gearmod);       
-        thrusterSound.pitch = Mathf.Clamp (engineRevs, LowPitch+gearmod, HighPitch+gearmod);       
+        shipsEngine.adjustNoise(gearmod,engineRevs);   
     }
 
     protected void shiftgear(string direction){
@@ -219,6 +229,7 @@ public class Hover : MonoBehaviour
                 break;
         }
     }    
+
     protected float getThrust(){
         float tempThrust = (powerInput * speed * accel * revMod[currentGear-1])+(powerInput * speed * gearValues[currentGear-1]);
         return tempThrust;
@@ -235,11 +246,11 @@ public class Hover : MonoBehaviour
         //float draftPower = 0.25f;
         IsDrafting = false;
         RaycastHit hit; 
+        Vector3 forwardDir = transform.forward;
+        Vector3 rightDir = transform.right;
         for(int i = 0; i < 4; i++ ){
             Vector3 sensorStartPos = transform.position;
             sensorStartPos.y += draftRayY;
-            Vector3 forwardDir = transform.forward;
-            Vector3 rightDir = transform.right;
             sensorStartPos += forwardDir * draftRayX;            
             sensorStartPos.y += draftRayY-0.3f+0.3f*i;
             //center sensor
@@ -402,6 +413,85 @@ public class Hover : MonoBehaviour
         stableRotation = Quaternion.Euler(tempX, transform.eulerAngles.y, zRotation);
         //push the ship towards stability
         transform.rotation = Quaternion.Lerp(transform.rotation, stableRotation,  stabilizerPower);
+    }
 
+    protected void findRacers(){
+        GameObject[] Aiships = GameObject.FindGameObjectsWithTag("AIship");
+        GameObject playersShip = GameObject.FindWithTag("PlayerShip"); 
+        //player
+        //racerList.Add(playersShip.GetComponentInChildren<Transform>());
+        racerDistances.Add(playersShip.GetComponentInChildren<Transform>(),0f);
+        //aiships
+        foreach(GameObject v in Aiships){
+            //racerList.Add(v.GetComponentInChildren<Transform>());
+            racerDistances.Add(v.GetComponentInChildren<Transform>(),0f);
+        } 
+        racerList = new List<Transform>(racerDistances.Keys);
+    }
+
+    protected bool racersClose(){
+        bool racerClose = false;
+        for(int i = 0; i < racerDistances.Count; i++){
+            float dist = Vector3.Distance(racerList[i].position, transform.position);
+            racerDistances[racerList[i]] = dist; // racerList[i].getPosition();
+            if (dist < 81){
+                racerClose = true;
+            }
+        }
+        return racerClose;
+    }
+
+    protected void sideSensors(){
+        inRamRange = false;
+        Vector3 forwardDir = transform.forward;
+        Vector3 rightDir = transform.right;
+        Vector3 upDir = transform.up;
+        for(int i = 0; i < 4; i++ ){
+            sensorArray(rightDir, -forwardDir,upDir,i);
+            sensorArray(-rightDir, forwardDir,upDir,i);
+          /*   Vector3 sensorStartPos = transform.position;
+            sensorStartPos += rightDir * draftRayX; 
+            sensorStartPos += upDir * 0.3f * i;            
+            //center sensor
+            sensorRay(sensorStartPos,rightDir,RamRange);
+            //right sensor
+            sensorStartPos += 0.3f * forwardDir;
+            sensorRay(sensorStartPos,rightDir,RamRange);
+            //right angle sensor
+            sensorRay(sensorStartPos, Quaternion.AngleAxis(-draftRayAngle, transform.up) * transform.right, RamRange);
+            //left sensor
+            sensorStartPos += 0.6f * -forwardDir;
+            sensorRay(sensorStartPos,rightDir,RamRange);
+            //left angle sensor
+            sensorRay(sensorStartPos,Quaternion.AngleAxis(draftRayAngle, transform.up) * transform.right,RamRange);       
+       */
+        }         
+    }
+
+    protected void sensorArray(Vector3 facingDir,Vector3 rightDir, Vector3 upDir, int i = 0){
+        Vector3 sensorStartPos = transform.position;
+        sensorStartPos += facingDir * draftRayX; 
+        sensorStartPos += upDir * 0.3f * i;            
+        //center sensor
+        sensorRay(sensorStartPos,facingDir,RamRange);
+        //right sensor
+        sensorStartPos += 0.3f * rightDir;
+        sensorRay(sensorStartPos,facingDir,RamRange);
+        //right angle sensor
+        sensorRay(sensorStartPos, Quaternion.AngleAxis(-draftRayAngle, upDir) * rightDir, RamRange);
+        //left sensor
+        sensorStartPos += 0.6f * -rightDir;
+        sensorRay(sensorStartPos,facingDir,RamRange);
+        //left angle sensor
+        sensorRay(sensorStartPos,Quaternion.AngleAxis(draftRayAngle, upDir) * rightDir,RamRange);               
+    }
+
+    protected void sensorRay(Vector3 start, Vector3 dir, float range){
+        RaycastHit hit; 
+        if (Physics.Raycast(start, dir, out hit, range)  && isShip(hit))
+        {
+            Debug.DrawLine(start, hit.point, Color.red);
+            inRamRange = true; 
+        }  
     }
 }
