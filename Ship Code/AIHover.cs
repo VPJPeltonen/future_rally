@@ -86,13 +86,13 @@ public class AIHover : Hover
             var thrust = getThrust();
             shipRigidbody.AddRelativeForce(0f, 0f, thrust);
             if(accel < 1){
-                accel += accelerationRate;
+                accel += accelerationRate[currentGear-1];
             }else{
                 shiftgear("up");
             }   
         }else{
             if(accel > 0 && Time.timeScale == 1){
-                accel -= accelerationRate;
+                accel -= accelerationRate[currentGear-1];
             }else{
                 shiftgear("down");
             }

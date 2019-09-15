@@ -14,7 +14,7 @@ public class PlayerHover : Hover
     private float maxTurbo = 100f;
     private float currentTurbo = 0f;
     private float turboRegen = 0.05f;
-    private bool turboInput,playing;
+    private bool turboInput,ramInput, UIshowInput,playing;
     private float turboPower = 40f;
     private int collissionImmunity = 0;
     private bool godmode = false;
@@ -37,8 +37,8 @@ public class PlayerHover : Hover
         baseDrag = 0.7f;
     }
 
-    void Update (){     
-        CheckWaypointDistance();
+    void Update (){  
+        getInput();           
         engineNoise();
         if(debugMode){
             string debugInfo = "";
@@ -49,11 +49,23 @@ public class PlayerHover : Hover
             }
             debugText.text = debugInfo;
         }
+        engineSlider.value = accel;
+    }
+
+    void FixedUpdate()
+    {
+        getInput();
+        CheckWaypointDistance();
         if(engineOn){   
             if(controlsActive){
-                if(!godmode){getInput();}
+                
                 gearBox();
-                if(Time.timeScale == 1){turboBooster();}
+                if(Time.timeScale == 1){
+                    turboBooster();
+                    if(ramInput && inRamRange){
+                        Ram();
+                    }
+                }
             }
         }else{
             collissionTimer++;
@@ -65,11 +77,6 @@ public class PlayerHover : Hover
                 collissionTimer = 0;
             }
         }
-        engineSlider.value = accel;
-    }
-
-    void FixedUpdate()
-    {
         calculateSpeed();
         if(racersClose()){
             CheckDraft();
@@ -136,14 +143,14 @@ public class PlayerHover : Hover
             //check if driver is accelerating
             if(powerInput>0){
                 if(accel < 1){
-                    accel += accelerationRate;
+                    accel += accelerationRate[currentGear-1];
                 }else{
                     shiftgear("up");
                     showGear();
                 }            
             }else{
                 if(accel > 0){
-                    accel -= accelerationRate*4;
+                    accel -= accelerationRate[currentGear-1]*4;
                 }else{
                     shiftgear("down");
                     showGear();
@@ -151,10 +158,10 @@ public class PlayerHover : Hover
             }
             //check if reversing
             if(reverseAccel < 1 && powerInput<0){
-                reverseAccel += accelerationRate;
+                reverseAccel += accelerationRate[currentGear-1];
             }else{
                 if(reverseAccel > 0){
-                    reverseAccel -= accelerationRate;
+                    reverseAccel -= accelerationRate[currentGear-1];
                 }
             }
         }
@@ -165,7 +172,7 @@ public class PlayerHover : Hover
     private void calculateSpeed(){
         moveSpeed = (transform.position - lastPosition).magnitude;
         lastPosition = transform.position;
-        speedText.text = (Mathf.Round(moveSpeed*100)).ToString();
+        speedText.text = (Mathf.Round(moveSpeed*200)).ToString();
     }
 
     private void turboBooster(){
@@ -229,9 +236,13 @@ public class PlayerHover : Hover
     }
 
     private void getInput(){
-        powerInput = Input.GetAxisRaw ("Vertical");
-        turnInput = Input.GetAxis ("Horizontal");
-        turboInput = Input.GetButton("Jump"); 
+        UIshowInput = Input.GetButton("HideUI");
+        if(!godmode && controlsActive && engineOn){
+            powerInput = Input.GetAxisRaw ("Vertical");
+            turnInput = Input.GetAxis ("Horizontal");
+            turboInput = Input.GetButton("Turbo Boost"); 
+            ramInput = Input.GetButton("Ram");
+        }
     }
 
 
@@ -243,7 +254,7 @@ public class PlayerHover : Hover
             windEffects.gameObject.SetActive(false);
             bottomThruster.gameObject.SetActive(true);
         }
-        if(dragState == "drafting" && moveSpeed >= 1){
+        if(dragState == "drafting" && moveSpeed >= 1){ 
             draftEffects.gameObject.SetActive(true);
         }else{
             draftEffects.gameObject.SetActive(false);

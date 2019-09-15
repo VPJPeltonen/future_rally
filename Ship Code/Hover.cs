@@ -34,9 +34,9 @@ public class Hover : MonoBehaviour
     protected float stabilizerPower = 0.1f;
     protected float angle = 0;
     //acceleration
-    public float accelerationRate = 0.0025f;
-    protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 2.95f };
-    protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.4f, 0.2f };
+    protected float[] accelerationRate = { 0.005f, 0.0025f, 0.0025f, 0.002f, 0.001f };//0.0025f;
+    protected float[] gearValues = { 0, 1.4f, 2.1f, 2.6f, 3.1f };
+    protected float[] revMod = { 1.5f, 0.8f, 0.6f, 0.5f, 0.5f };
     protected int shipToughness = 25;
     
 
@@ -91,7 +91,9 @@ public class Hover : MonoBehaviour
 
     [Header("Ram Stuff")]
     protected bool inRamRange = false;
-    protected float RamRange = 20f;
+    protected float RamRange = 10f;
+    protected Transform ramTarget;
+    protected float ramTargetDist;
 
     [Header("Effects")]
     public GameObject usedDust,desertDust,darkDesertDust,windEffects,bottomThruster;
@@ -143,9 +145,7 @@ public class Hover : MonoBehaviour
         return distance;
     }    
 
-    //hovering code
     protected void HoverShip(){
-        //Ray ray = new Ray (transform.position, -transform.up);
         //get world down
         Vector3 vektori = new Vector3(0,-1,0);
         Vector3 hoverSensor = transform.position;
@@ -156,7 +156,6 @@ public class Hover : MonoBehaviour
         //if found ground push against it
         if (Physics.Raycast(ray, out hit, hoverHeight))
         {
-
             float proportionalHeight = ( Mathf.Sqrt(hoverHeight) -  Mathf.Sqrt(hit.distance)) / hoverHeight;         
             if(proportionalHeight > 0){
                 float upSpeed = shipRigidbody.velocity.y;
@@ -434,7 +433,7 @@ public class Hover : MonoBehaviour
         for(int i = 0; i < racerDistances.Count; i++){
             float dist = Vector3.Distance(racerList[i].position, transform.position);
             racerDistances[racerList[i]] = dist; // racerList[i].getPosition();
-            if (dist < 81){
+            if (dist < 81 && dist != 0){//ship is within interaction distance and not self
                 racerClose = true;
             }
         }
@@ -443,28 +442,13 @@ public class Hover : MonoBehaviour
 
     protected void sideSensors(){
         inRamRange = false;
+        ramTargetDist = 81f;
         Vector3 forwardDir = transform.forward;
         Vector3 rightDir = transform.right;
         Vector3 upDir = transform.up;
         for(int i = 0; i < 4; i++ ){
             sensorArray(rightDir, -forwardDir,upDir,i);
             sensorArray(-rightDir, forwardDir,upDir,i);
-          /*   Vector3 sensorStartPos = transform.position;
-            sensorStartPos += rightDir * draftRayX; 
-            sensorStartPos += upDir * 0.3f * i;            
-            //center sensor
-            sensorRay(sensorStartPos,rightDir,RamRange);
-            //right sensor
-            sensorStartPos += 0.3f * forwardDir;
-            sensorRay(sensorStartPos,rightDir,RamRange);
-            //right angle sensor
-            sensorRay(sensorStartPos, Quaternion.AngleAxis(-draftRayAngle, transform.up) * transform.right, RamRange);
-            //left sensor
-            sensorStartPos += 0.6f * -forwardDir;
-            sensorRay(sensorStartPos,rightDir,RamRange);
-            //left angle sensor
-            sensorRay(sensorStartPos,Quaternion.AngleAxis(draftRayAngle, transform.up) * transform.right,RamRange);       
-       */
         }         
     }
 
@@ -473,25 +457,47 @@ public class Hover : MonoBehaviour
         sensorStartPos += facingDir * draftRayX; 
         sensorStartPos += upDir * 0.3f * i;            
         //center sensor
-        sensorRay(sensorStartPos,facingDir,RamRange);
+        sensorRay(sensorStartPos,facingDir,10f);
         //right sensor
         sensorStartPos += 0.3f * rightDir;
-        sensorRay(sensorStartPos,facingDir,RamRange);
-        //right angle sensor
-        sensorRay(sensorStartPos, Quaternion.AngleAxis(-draftRayAngle, upDir) * rightDir, RamRange);
+        sensorRay(sensorStartPos,facingDir,10f);
+        //right sensor
+        sensorStartPos += 0.3f * rightDir;
+        sensorRay(sensorStartPos,facingDir,10f);
+        //right angle sensor 1
+        sensorRay(sensorStartPos, Quaternion.AngleAxis(5f, upDir) * facingDir, 10f);
+        //right angle sensor 2
+        sensorRay(sensorStartPos, Quaternion.AngleAxis(10f, upDir) * facingDir, 10f);
         //left sensor
-        sensorStartPos += 0.6f * -rightDir;
-        sensorRay(sensorStartPos,facingDir,RamRange);
+        sensorStartPos += 0.9f * -rightDir;
+        sensorRay(sensorStartPos,facingDir,10f);
+        //left sensor
+        sensorStartPos += 0.3f * -rightDir;
+        sensorRay(sensorStartPos,facingDir,10f);
         //left angle sensor
-        sensorRay(sensorStartPos,Quaternion.AngleAxis(draftRayAngle, upDir) * rightDir,RamRange);               
+        sensorRay(sensorStartPos,Quaternion.AngleAxis(-5f, upDir) * facingDir,10f);               
+        //left angle sensor 2
+        sensorRay(sensorStartPos,Quaternion.AngleAxis(-10f, upDir) * facingDir,10f);
     }
 
     protected void sensorRay(Vector3 start, Vector3 dir, float range){
         RaycastHit hit; 
-        if (Physics.Raycast(start, dir, out hit, range)  && isShip(hit))
-        {
+        if (Physics.Raycast(start, dir, out hit, range)  ){//&& isShip(hit)){
             Debug.DrawLine(start, hit.point, Color.red);
             inRamRange = true; 
+            if(hit.distance < ramTargetDist){
+                ramTargetDist = hit.distance;
+                ramTarget =  hit.collider.GetComponent<Transform>();
+            }
         }  
+    }
+
+    protected void Ram(){
+       /*  float ramForce = 10f;
+        //get direction of target
+        Vector3 heading = ramTarget.position - shipRigidbody.position;
+        //apply force to that direction
+        shipRigidbody.AddForce(heading * ramForce, ForceMode.Acceleration);
+        shipsEngine.triggerRamThruster("left");*/
     }
 }

@@ -4,11 +4,26 @@ using UnityEngine;
 
 public class ThrusterEngine : MonoBehaviour
 {
-    public ParticleSystem thruster1, thruster2, turbo1,turbo2;
+    public ParticleSystem thruster1, thruster2, turbo1,turbo2,leftRamThruster,rightRamThruster;
     public AudioSource engineNoise,engineClank,thrusterNoise,turboSound;
     private const float LowPitch = 0.2f;
     private const float HighPitch = 2f;
     private bool turboPlaying = false;
+    private int ramCounter = 0;
+
+    private void FixedUpdate() {
+        if(ramCounter > 0){
+            ramCounter--;
+        }   
+        if(ramCounter == 1){
+            var em = leftRamThruster.emission;
+            //turboSound.Play(0);
+            em.enabled = false;
+            em = rightRamThruster.emission;
+            em.enabled = false;
+        } 
+    }
+
     public void enableThrusters(bool select){
         var em = thruster1.emission;
         em.enabled = select;
@@ -30,6 +45,20 @@ public class ThrusterEngine : MonoBehaviour
         }else{
             turboSound.Stop();
             turboPlaying = false;
+        }
+    }
+
+    public void triggerRamThruster(string side){
+        if(side == "left"){
+            var em = leftRamThruster.emission;
+            em.enabled = true;
+            ramCounter = 100;
+        }else if(side == "right"){
+            var em = rightRamThruster.emission;
+            em.enabled = true;
+            ramCounter = 100;
+        }else{
+            Debug.Log("invalid side for ram");
         }
     }
 

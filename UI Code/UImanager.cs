@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class UImanager : MonoBehaviour
 {
-    public GameObject pausemenu;
+    public GameObject pausemenu, mainUI, pos, timeDisplay;
+    private bool UIvisible = true;
 
     private void Awake() {
         //for some reason timescale of map is set to 0 if you restart the map from menu
@@ -24,6 +25,23 @@ public class UImanager : MonoBehaviour
                 Debug.Log("open");
            }
         }
+        if(Input.GetButton("HideUI") ){
+            if(UIvisible){
+                mainUI.gameObject.SetActive(false);
+                pos.gameObject.SetActive(false);
+                timeDisplay.gameObject.SetActive(false);
+                UIvisible = false;
+            }else{
+                mainUI.gameObject.SetActive(true);
+                pos.gameObject.SetActive(true);
+                timeDisplay.gameObject.SetActive(true);
+                UIvisible = true;
+            }
+        }            
+    }
+
+    private void FixedUpdate() {
+    
     }
 
     private void closeMenu(){
