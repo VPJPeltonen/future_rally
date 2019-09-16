@@ -236,12 +236,17 @@ public class PlayerHover : Hover
     }
 
     private void getInput(){
+        bool cameraChangeInput = Input.GetButton("Camera");
+        if(cameraChangeInput){
+            camera.changeView();
+        }
         UIshowInput = Input.GetButton("HideUI");
         if(!godmode && controlsActive && engineOn){
             powerInput = Input.GetAxisRaw ("Vertical");
             turnInput = Input.GetAxis ("Horizontal");
             turboInput = Input.GetButton("Turbo Boost"); 
             ramInput = Input.GetButton("Ram");
+            
         }
     }
 
