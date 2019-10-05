@@ -14,11 +14,11 @@ public class PlayerHover : Hover
     private float maxTurbo = 100f;
     private float currentTurbo = 0f;
     private float turboRegen = 0.05f;
-    private bool turboInput,ramInput, UIshowInput,playing;
+    private bool turboInput,ramInput, UIshowInput,playing,cameraChangeInput;
     private float turboPower = 40f;
     private int collissionImmunity = 0;
     private bool godmode = false;
-    private bool debugMode = true;
+    private bool debugMode = false;
     //effect things
     public GameObject draftEffects;
 
@@ -58,7 +58,6 @@ public class PlayerHover : Hover
         CheckWaypointDistance();
         if(engineOn){   
             if(controlsActive){
-                
                 gearBox();
                 if(Time.timeScale == 1){
                     turboBooster();
@@ -180,8 +179,7 @@ public class PlayerHover : Hover
             if(currentTurbo > 0){
                 shipRigidbody.AddRelativeForce(0f, 0f, turboPower);
                 currentTurbo -= 0.5f;
-                if (!playing){
-                    
+                if (!playing){                    
 //                    turboSound.Play(0);
                     playing = true;
                 }
@@ -204,7 +202,6 @@ public class PlayerHover : Hover
 
   /*   private void enableTurbo(bool select){
         var em = turbo1.emission;
-
         //turboSound.Play(0);
         em.enabled = select;
         em = turbo2.emission;
@@ -236,7 +233,7 @@ public class PlayerHover : Hover
     }
 
     private void getInput(){
-        bool cameraChangeInput = Input.GetButton("Camera");
+        cameraChangeInput = Input.GetButton("Camera");
         if(cameraChangeInput){
             camera.changeView();
         }
@@ -246,7 +243,6 @@ public class PlayerHover : Hover
             turnInput = Input.GetAxis ("Horizontal");
             turboInput = Input.GetButton("Turbo Boost"); 
             ramInput = Input.GetButton("Ram");
-            
         }
     }
 

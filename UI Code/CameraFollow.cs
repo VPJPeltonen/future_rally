@@ -6,6 +6,7 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform target;
     public AudioSource music;
+    private bool shakeOn;
     private Vector3 defaultDistance = new Vector3(0f,0.6f,-2f);
     private Vector3 firstPersonDistance = new Vector3(0f,0f,1f);
     private float powerInput,turnInput;
@@ -40,30 +41,19 @@ public class CameraFollow : MonoBehaviour
     public Material material;
 
     public bool DistortOn { get => distortOn; set => distortOn = value; }
+    public bool ShakeOn { get => shakeOn; set => shakeOn = value; }
 
     void Start(){
         cameraBody = GetComponent <Rigidbody>();
         //toggle music based on setting
         bool musicPlay = GameController.getMusicSetting();
-        Debug.Log(musicPlay);
+        //Debug.Log(musicPlay);
         music.enabled = musicPlay;
     }
 
     void Update(){
-        bool BButton = Input.GetKeyDown(KeyCode.B);
-        bool NButton = Input.GetKeyDown(KeyCode.N);
-        if(BButton && NButton){
-            if(state == "god"){
-                state = "normal";
-                player.godMode(false);
-                UI.gameObject.SetActive(true);
-            }else{
-                state = "god";
-                player.godMode(true);
-                UI.gameObject.SetActive(false);
-            }
-        }
-         switch(mode){
+        checkButtons();
+        switch(mode){
             case "3rd person":
                 //thirdPersonMode();
                 break;
@@ -75,6 +65,8 @@ public class CameraFollow : MonoBehaviour
                 break;
         }
     }
+
+
 
     void FixedUpdate(){ 
         switch(mode){
@@ -94,10 +86,13 @@ public class CameraFollow : MonoBehaviour
     public void startRace() => music.Play(0);
 
     public void changeView(){
-        if(mode == "1st person"){
-            mode = "3rd person";
-        }else{
-            mode = "1st person";
+        if(state != "switching mode"){
+            state = "switching mode";
+            if(mode == "1st person"){
+                mode = "3rd person";
+            }else{
+                mode = "1st person";
+            }
         }
     }
     private void OnRenderImage(RenderTexture src, RenderTexture dest) {
@@ -153,14 +148,15 @@ public class CameraFollow : MonoBehaviour
        //Vector3 toPos = target.position; //+ (target.rotation * cameraDistance);
         //toPos.y = ((toPos.y + toPos.y + camT.position.y)/3);
         //Vector3 curPos = Vector3.SmoothDamp(camT.position, toPos, ref velocity, distanceDamp, max);
-        Vector3 newRotation = new Vector3(target.transform.eulerAngles.x, target.transform.eulerAngles.y, target.transform.eulerAngles.z);
-        camT.transform.eulerAngles = newRotation;       
-        camT.position = target.position;
-        if(roll){
-            //camT.LookAt(target.right, target.up);
+        Vector3 newRotation;
+        if(shakeOn){
+            newRotation = new Vector3(target.transform.eulerAngles.x, target.transform.eulerAngles.y, target.transform.eulerAngles.z);
         }else{
-           //camT.LookAt(target);
-        }        
+            newRotation = new Vector3(camT.transform.eulerAngles.x , target.transform.eulerAngles.y, target.transform.eulerAngles.z);
+        }
+       // newRotation = new Vector3(camT.transform.eulerAngles.x , target.transform.eulerAngles.y, target.transform.eulerAngles.z);
+        camT.transform.eulerAngles = newRotation;       
+        camT.position = target.position;        
     }
 
     private void thirdPersonMode(){
@@ -183,11 +179,21 @@ public class CameraFollow : MonoBehaviour
             case "god":
                 godMode();
                 break;
+            case "switching mode":
+                SmoothFollow(3000f,false,defaultDistance);
+                counter++;
+                if (counter >= 50){
+                    distortOn = false;
+                    state = "normal";
+                    counter = 0;
+                }            
+                break;
             default:
                 SmoothFollow(1000f,false,defaultDistance);
                 break;
         }
     }
+
     private void firstPersonMode(){
         switch(state){
             case "normal":
@@ -208,9 +214,33 @@ public class CameraFollow : MonoBehaviour
             case "god":
                 godMode();
                 break;
+            case "switching mode":
+                firstPersonView(3000f,false,defaultDistance);
+                counter++;
+                if (counter >= 50){
+                    distortOn = false;
+                    state = "normal";
+                    counter = 0;
+                }            
+                break;                
             default:
                 firstPersonView(1000f,true,firstPersonDistance);
                 break;
         }        
+    }
+    private void checkButtons(){
+        bool BButton = Input.GetKeyDown(KeyCode.B);
+        bool NButton = Input.GetKeyDown(KeyCode.N);
+        if(BButton && NButton){
+            if(state == "god"){
+                state = "normal";
+                player.godMode(false);
+                UI.gameObject.SetActive(true);
+            }else{
+                state = "god";
+                player.godMode(true);
+                UI.gameObject.SetActive(false);
+            }
+        }
     }
 }
