@@ -14,7 +14,9 @@ public class CameraFollow : MonoBehaviour
     public float rotationalDamp = 0.05f;
     private string state;
     private string mode = "1st person";
+    //counter variables
     private int counter = 0;
+    private int distortCounter = 0;
     private bool distortOn = false;
     Transform camT;
     public Vector3 velocity = Vector3.one;
@@ -39,6 +41,7 @@ public class CameraFollow : MonoBehaviour
     public PlayerHover player;
     public GameObject UI;
     public Material material;
+    private float stableX;
 
     public bool DistortOn { get => distortOn; set => distortOn = value; }
     public bool ShakeOn { get => shakeOn; set => shakeOn = value; }
@@ -49,6 +52,8 @@ public class CameraFollow : MonoBehaviour
         bool musicPlay = GameController.getMusicSetting();
         //Debug.Log(musicPlay);
         music.enabled = musicPlay;
+        shakeOn = true;
+        stableX = target.transform.eulerAngles.x;
     }
 
     void Update(){
@@ -150,9 +155,10 @@ public class CameraFollow : MonoBehaviour
         //Vector3 curPos = Vector3.SmoothDamp(camT.position, toPos, ref velocity, distanceDamp, max);
         Vector3 newRotation;
         if(shakeOn){
-            newRotation = new Vector3(target.transform.eulerAngles.x, target.transform.eulerAngles.y, target.transform.eulerAngles.z);
+            float xVector = Mathf.Clamp(target.transform.eulerAngles.x, stableX-0.5f, stableX+0.5f);
+            newRotation = new Vector3(xVector, target.transform.eulerAngles.y, target.transform.eulerAngles.z);
         }else{
-            newRotation = new Vector3(camT.transform.eulerAngles.x , target.transform.eulerAngles.y, target.transform.eulerAngles.z);
+            newRotation = new Vector3(stableX , target.transform.eulerAngles.y, target.transform.eulerAngles.z);
         }
        // newRotation = new Vector3(camT.transform.eulerAngles.x , target.transform.eulerAngles.y, target.transform.eulerAngles.z);
         camT.transform.eulerAngles = newRotation;       
